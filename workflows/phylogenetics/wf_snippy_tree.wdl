@@ -24,13 +24,19 @@ workflow snippy_tree_wf {
     String? data_summary_terra_workspace
     String? data_summary_terra_table
     String? data_summary_column_names # comma delimited
+    Int snippy_core_disk_size = 100
+    Int snippy_core_cpu = 4
+    Int snippy_core_memory = 8
   }
   call snippy_core_task.snippy_core {
     input:
       snippy_variants_outdir_tarball = snippy_variants_outdir_tarball,
       samplenames = samplenames,
       reference = reference,
-      tree_name = tree_name
+      tree_name = tree_name,
+      disk_size = snippy_core_disk_size,
+      cpu = snippy_core_cpu,
+      memory = snippy_core_memory
   }
   if (use_gubbins) {
     call gubbins_task.gubbins {
