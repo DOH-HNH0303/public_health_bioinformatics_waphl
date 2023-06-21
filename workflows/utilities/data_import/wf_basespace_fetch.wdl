@@ -43,7 +43,6 @@ task fetch_bs {
     Int mem_size_gb = 8
     Int CPUs = 2
     Int disk_size = 100
-    Int Preemptible = 1
   }
   command <<<
     # set basespace name and id variables
@@ -129,6 +128,6 @@ task fetch_bs {
     memory: "~{mem_size_gb} GB"
     cpu: CPUs
     disks: "local-disk ~{disk_size} SSD"
-    preemptible: Preemptible
+    preemptible: 0
   }
 }
