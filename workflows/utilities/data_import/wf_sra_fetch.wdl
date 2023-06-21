@@ -53,5 +53,6 @@ task fastq_dl_sra {
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible:  1
+    maxRetries: 3
   }
 }
