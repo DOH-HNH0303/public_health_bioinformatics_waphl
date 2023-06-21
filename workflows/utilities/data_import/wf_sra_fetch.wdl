@@ -52,7 +52,7 @@ task fastq_dl_sra {
     cpu: cpus
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
-    preemptible:  1
+    preemptible:  0
     maxRetries: 3
   }
 }
