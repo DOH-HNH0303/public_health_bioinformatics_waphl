@@ -27,7 +27,7 @@ workflow fetch_sra_to_fastq {
 task fastq_dl_sra {
   input {
     String sra_accession
-    String docker = "quay.io/biocontainers/fastq-dl:2.0.1--pyhdfd78af_0"
+    String docker = "quay.io/biocontainers/fastq-dl:2.0.2--pyhdfd78af_0"
     Int disk_size = 100
     Int cpus = 2
     Int memory = 8
