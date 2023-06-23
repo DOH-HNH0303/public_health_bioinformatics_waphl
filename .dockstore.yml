@@ -12,7 +12,7 @@ workflows:
     - empty.json
  - name: kSNP3
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_ksnp3_WAPHL.wdl
+   primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp3.wdl
    testParameterFiles:
     - empty.json
  - name: kSNP3_WAPHL
@@ -182,7 +182,7 @@ workflows:
     - empty.json
  - name: TheiaProk_Illumina_PE_WAPHL
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_theiaprok_illumina_pe_WAPHL.wdl
+   primaryDescriptorPath: /workflows/theiaprok/wf_theiaprok_illumina_pe_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: TheiaProk_ONT_PHB
