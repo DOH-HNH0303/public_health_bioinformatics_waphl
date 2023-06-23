@@ -1,6 +1,6 @@
 version 1.0
 
-import "../utilities/wf_read_QC_trim.wdl" as read_qc
+import "../utilities/wf_read_QC_trim_pe.wdl" as read_qc
 import "../utilities/wf_merlin_magic.wdl" as merlin_magic
 import "../../tasks/assembly/task_shovill.wdl" as shovill
 import "../../tasks/quality_control/task_quast.wdl" as quast
