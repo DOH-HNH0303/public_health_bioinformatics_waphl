@@ -616,10 +616,6 @@ workflow theiaprok_illumina_pe_waphl {
     String? abricate_database = merlin_magic.abricate_database
     String? abricate_version = merlin_magic.abricate_version
     String? abricate_docker = merlin_magic.abricate_docker
-    # Legionella pneumophila typing
-    File? legsta_results = merlin_magic_cdip_legionella.legsta_results
-    String? legsta_predicted_sbt = merlin_magic_cdip_legionella.legsta_predicted_sbt
-    String? legsta_version = merlin_magic_cdip_legionella.legsta_version
     # Mycobacterium Typing
     File? tbprofiler_output_file = merlin_magic.tbprofiler_output_file
     File? tbprofiler_output_bam = merlin_magic.tbprofiler_output_bam
