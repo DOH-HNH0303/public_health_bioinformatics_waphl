@@ -332,7 +332,7 @@ workflow theiaprok_illumina_pe_waphl {
     String? num_reads_clean_pairs = read_QC_trim.fastq_scan_clean_pairs
     # Read QC - trimmomatic outputs
     String? trimmomatic_version = read_QC_trim.trimmomatic_version
-    String? trimmomatic_software = read_QC_trim.trimmomatic_pe_software
+    #String? trimmomatic_software = read_QC_trim.trimmomatic_pe_software
     # Read QC - fastp outputs
     String? fastp_version = read_QC_trim.fastp_version
     # Read QC - bbduk outputs
