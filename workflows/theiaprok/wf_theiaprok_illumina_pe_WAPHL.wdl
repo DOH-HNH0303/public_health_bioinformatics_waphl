@@ -15,6 +15,7 @@ import "../../tasks/quality_control/task_general_qc.wdl" as general_qc
 #Theiagen packages added
 import "../../tasks/quality_control/task_screen.wdl" as screen
 import "../../tasks/quality_control/task_busco.wdl" as busco_task
+import "../../tasks/quality_control/task_qc_check_phb.wdl" as qc_check
 import "../../tasks/quality_control/task_mummer_ani.wdl" as ani_task
 import "../../tasks/quality_control/task_qc_utils.wdl" as qc
 import "../../tasks/gene_typing/task_amrfinderplus.wdl" as amrfinderplus
