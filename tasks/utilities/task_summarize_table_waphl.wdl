@@ -115,8 +115,11 @@ task join_existing_tables {
     import pandas as pd
     import csv
     import os.path
+    import datetime 
 
-
+    
+    currentDate = datetime.date.today()
+    currentDate = currentDate.strftime("%d%m%Y")
     metrics = {"est_coverage":"~{depth_cov}", "busco_results":"~{busco}", "r1_mean_q":"~{avg_q}", "kraken2_clean_human":"~{contam}", "perc_n":"~{perc_n}"}
 
     def common_elements(list1, list2):
@@ -179,12 +182,12 @@ task join_existing_tables {
     df = pd.read_csv("table-data.tsv", sep="\t")   
     df = df[df[df.columns[0]].isin(tsv_list)]
 
-    df.to_csv("~{terra_table}_data.tsv", sep="\t", index=False)
+    df.to_csv("~{old_terra_table}_+"currentDate+"_dump.tsv", sep="\t", index=False)
 
     CODE    
   >>>
   output {
-    File summarized_data = "~{terra_table}_data.tsv"
+    File summarized_data = select_first(glob("*_dump.tsv"))
   }
   runtime {
     docker: "broadinstitute/terra-tools:tqdm"
