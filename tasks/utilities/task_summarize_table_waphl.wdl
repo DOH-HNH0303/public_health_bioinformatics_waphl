@@ -100,7 +100,7 @@ task join_existing_tables {
   command <<<   
     # when running on terra, comment out all input_table mentions
     # Pull an existing table to add to *if* old_terra_table has been provided
-    ~{'python3 /scripts/export_large_tsv/export_large_tsv.py --project '+terra_project+' --workspace '+terra_workspace+' --entity_type '+terra_table+' --tsv_filename data_old.tsv'} 
+    ~{'python3 /scripts/export_large_tsv/export_large_tsv.py --project '+terra_project+' --workspace '+terra_workspace+' --entity_type '+old_terra_table+' --tsv_filename data_old.tsv'} 
     echo ~{sep=' ' samplenames}>list.txt
     table_array=(~{sep=' ' new_terra_tables})
 
