@@ -33,7 +33,7 @@ import "../../tasks/taxon_id/task_fastani.wdl" as fastani
 import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 
 
-workflow theiaprok_illumina_pe {
+workflow theiaprok_illumina_pe_waphl {
   meta {
     description: "De-novo genome assembly, taxonomic ID, and QC of paired-end bacterial NGS data"
   }
