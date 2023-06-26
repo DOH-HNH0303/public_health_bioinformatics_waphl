@@ -368,9 +368,16 @@ workflow theiaprok_illumina_pe_waphl {
     Int? n50_value = quast.n50_value
     Float? quast_gc_percent = quast.gc_percent
     # Assembly QC - cg pipeline outputs
-    File? cg_pipeline_report = cg_pipeline.cg_pipeline_report
-    String? cg_pipeline_docker = cg_pipeline.cg_pipeline_docker
-    Float? est_coverage = cg_pipeline.est_coverage
+    #File? cg_pipeline_report = cg_pipeline.cg_pipeline_report
+    #String? cg_pipeline_docker = cg_pipeline.cg_pipeline_docker
+    #Float? est_coverage = cg_pipeline.est_coverage
+    # Assembly QC - cg pipeline outputs
+    File? cg_pipeline_report_raw = cg_pipeline_raw.cg_pipeline_report
+    String? cg_pipeline_docker = cg_pipeline_raw.cg_pipeline_docker
+    Float? est_coverage_raw = cg_pipeline_raw.est_coverage
+    File? cg_pipeline_report_clean = cg_pipeline_clean.cg_pipeline_report
+    Float? est_coverage_clean = cg_pipeline_clean.est_coverage
+    # Assembly QC - busco outputs
     String? busco_version = busco.busco_version
     String? busco_database = busco.busco_database
     String? busco_results = busco.busco_results
