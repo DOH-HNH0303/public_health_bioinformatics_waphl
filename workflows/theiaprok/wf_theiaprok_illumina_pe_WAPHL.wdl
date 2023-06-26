@@ -142,12 +142,19 @@ workflow theiaprok_illumina_pe_waphl {
         input:
           assembly_fasta = shovill_pe.assembly_fasta
       }
-      call cg_pipeline.cg_pipeline {
+      call cg_pipeline.cg_pipeline as cg_pipeline_raw {
         input:
           read1 = read1_raw,
           read2 = read2_raw,
           samplename = samplename,
-          genome_length = select_first([genome_size, clean_check_reads.est_genome_length])
+          genome_length = select_first([genome_size, quast.genome_length])
+      }
+      call cg_pipeline.cg_pipeline as cg_pipeline_clean {
+        input:
+          read1 = read_QC_trim.read1_clean,
+          read2 = read_QC_trim.read2_clean,
+          samplename = samplename,
+          genome_length = select_first([genome_size, quast.genome_length])
       }
       call gambit_task.gambit {
         input:
@@ -333,8 +340,14 @@ workflow theiaprok_illumina_pe_waphl {
     File? read2_clean = read_QC_trim.read2_clean
     String? bbduk_docker = read_QC_trim.bbduk_docker
     # Read QC - cg pipeline outputs
-    Float? r1_mean_q = cg_pipeline.r1_mean_q
-    Float? r2_mean_q = cg_pipeline.r2_mean_q
+    Float? r1_mean_q_raw = cg_pipeline_raw.r1_mean_q
+    Float? r2_mean_q_raw = cg_pipeline_raw.r2_mean_q
+    Float? combined_mean_q_raw = cg_pipeline_raw.combined_mean_q
+    Float? combined_mean_q_clean = cg_pipeline_clean.combined_mean_q
+    Float? r1_mean_readlength_raw = cg_pipeline_raw.r1_mean_readlength
+    Float? r2_mean_readlength_raw = cg_pipeline_raw.r2_mean_readlength
+    Float? combined_mean_readlength_raw = cg_pipeline_raw.combined_mean_readlength
+    Float? combined_mean_readlength_clean = cg_pipeline_clean.combined_mean_readlength
     # Read QC - midas outputs
     String? midas_docker = read_QC_trim.midas_docker
     File? midas_report = read_QC_trim.midas_report
