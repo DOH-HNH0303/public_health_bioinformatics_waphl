@@ -28,7 +28,7 @@ import "../../tasks/utilities/task_utilities.wdl" as utilities
 import "../../tasks/taxon_id/task_taxon_id_waphl.wdl" as taxon_id
 import "../../tasks/taxon_id/task_fastani.wdl" as fastani
 #import "../../tasks/task_denovo_assembly.wdl" as assembly
-import "../../tasks/task_read_clean.wdl" as read_clean
+#import "../../tasks/task_read_clean.wdl" as read_clean
 import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 
 
@@ -94,18 +94,15 @@ workflow theiaprok_illumina_pe {
     read1 = read1_raw,
     read2 = read2_raw
   }
-  call read_clean.ncbi_scrub_pe {
-    input:
-      samplename = samplename,
-      read1 = read1_raw,
-      read2 = read2_raw
-  }
   if (raw_check_reads.read_screen=="PASS") {
-    call read_qc.read_QC_trim {
+    call read_qc.read_QC_trim_pe as read_QC_trim {
     input:
       samplename = samplename,
-      read1_raw = ncbi_scrub_pe.read1_dehosted,
-      read2_raw = ncbi_scrub_pe.read2_dehosted
+        read1_raw = read1_raw,
+        read2_raw = read2_raw,
+        trim_minlen = trim_minlen,
+        trim_quality_trim_score = trim_quality_trim_score,
+        trim_window_size = trim_window_size
     }
 
     call taxon_id.kraken2 as kraken2_clean {
