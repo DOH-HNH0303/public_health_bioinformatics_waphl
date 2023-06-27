@@ -11,6 +11,7 @@ task ksnp4 {
     Int memory = 8
     Int cpu = 4
     Int disk_size = 100
+
   }
   command <<<
   assembly_array=(~{sep=' ' assembly_fasta})
@@ -48,7 +49,7 @@ task ksnp4 {
   cat ksnp4_input.tsv
 
   # run ksnp4 on input assemblies
-  kSNP4 -in ksnp4_input.tsv -outdir ksnp4 -k ~{kmer_size} -core -vcf ~{ksnp4_args} -debug
+  kSNP4 -in ksnp4_input.tsv -outdir ksnp4 -k ~{kmer_size} -core -vcf ~{ksnp4_args}
 
   echo "ls ksnp4"
   ls ksnp4
@@ -96,7 +97,7 @@ task ksnp4 {
   output {
     File ksnp4_core_matrix = "ksnp4/${cluster_name}_core_SNPs_matrix.fasta"
     File ksnp4_core_tree = "ksnp4/${cluster_name}_core.nwk"
-    File ksnp4_vcf = "ksnp4/VCF.${cluster_name}.vcf"
+    File ksnp4_vcf = "ksnp4/${cluster_name}.vcf"
     File ksnp4_pan_matrix = "ksnp4/~{cluster_name}_pan_SNPs_matrix.fasta"
     File ksnp4_pan_parsimony_tree = "ksnp4/~{cluster_name}_pan_parsimony.nwk"
     File? ksnp4_ml_core_tree = "ksnp4/~{cluster_name}_core_ML.nwk"
