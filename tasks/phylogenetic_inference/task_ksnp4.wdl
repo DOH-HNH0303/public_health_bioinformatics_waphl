@@ -97,7 +97,7 @@ task ksnp4 {
   output {
     File ksnp4_core_matrix = "ksnp4/${cluster_name}_core_SNPs_matrix.fasta"
     File ksnp4_core_tree = "ksnp4/${cluster_name}_core.nwk"
-    File ksnp4_vcf = "ksnp4/${cluster_name}.vcf"
+    File? ksnp4_vcf = "ksnp4/${cluster_name}.vcf"
     File ksnp4_pan_matrix = "ksnp4/~{cluster_name}_pan_SNPs_matrix.fasta"
     File ksnp4_pan_parsimony_tree = "ksnp4/~{cluster_name}_pan_parsimony.nwk"
     File? ksnp4_ml_core_tree = "ksnp4/~{cluster_name}_core_ML.nwk"
