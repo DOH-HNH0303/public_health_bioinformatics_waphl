@@ -49,6 +49,10 @@ task ksnp4 {
 
   # run ksnp4 on input assemblies
   kSNP4 -in ksnp4_input.tsv -outdir ksnp4 -k ~{kmer_size} -core -vcf ~{ksnp4_args} -debug
+
+  echo "ls ksnp4"
+  ls ksnp4
+  echo ""
   
   # rename ksnp4 outputs with cluster name 
   # sometimes the core nwk and fasta outputs do not have content
