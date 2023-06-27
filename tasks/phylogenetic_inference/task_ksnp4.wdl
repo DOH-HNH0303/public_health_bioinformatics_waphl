@@ -1,6 +1,6 @@
 version 1.0
 
-task ksnp3 {
+task ksnp4 {
   input {
     Array[File] assembly_fasta
     Array[String] samplename
