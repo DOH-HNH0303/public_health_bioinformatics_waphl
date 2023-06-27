@@ -54,19 +54,11 @@ task ksnp4 {
   echo "ls ksnp4"
   ls ksnp4
   echo ""
-  cat ksnp4/core_SNPs_matrix
-  echo ""
-  cat ksnp4/core_SNPs_matrix
-  echo ""
-  ls -la ksnp4/*core_SNPs*
-  echo ""
   
   # rename ksnp4 outputs with cluster name 
   # sometimes the core nwk and fasta outputs do not have content
   mv -v ksnp4/core_SNPs_matrix.fasta ksnp4/~{cluster_name}_core_SNPs_matrix.fasta
   mv -v ksnp4/tree.core_SNPs.parsimony.tre ksnp4/~{cluster_name}_core.nwk
-  
- 
   mv -v ksnp4/SNPs_all_matrix.fasta ksnp4/~{cluster_name}_pan_SNPs_matrix.fasta
 
   if [ -s ksnp4/~{cluster_name}_core_SNPs_matrix.fasta ]; then # is the file not-empty?
