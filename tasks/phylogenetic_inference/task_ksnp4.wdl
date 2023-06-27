@@ -53,6 +53,10 @@ task ksnp4 {
   echo "ls ksnp4"
   ls ksnp4
   echo ""
+  cat ksnp4/core_SNPs_matrix
+  echo ""
+  cat ksnp4/core_SNPs_matrix
+  echo ""
   ls -la ksnp4/*core_SNPs*
   echo ""
   
