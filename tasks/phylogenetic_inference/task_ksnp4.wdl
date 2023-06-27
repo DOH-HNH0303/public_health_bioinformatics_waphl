@@ -53,7 +53,7 @@ task ksnp4 {
   echo "ls ksnp4"
   ls ksnp4
   echo ""
-  ls -la *core_SNPs*
+  ls -la ksnp4/*core_SNPs*
   echo ""
   
   # rename ksnp4 outputs with cluster name 
