@@ -65,6 +65,7 @@ task ksnp4 {
     echo "The core SNP matrix was produced" | tee SKIP_SNP_DIST # then do NOT skip
   else
     echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST # otherwise, skip
+    cat ~{cluster_name}_core_SNPs_matrix.fasta
   fi
 
   mv -v ksnp4/VCF.*.vcf ksnp4/~{cluster_name}_core.vcf
