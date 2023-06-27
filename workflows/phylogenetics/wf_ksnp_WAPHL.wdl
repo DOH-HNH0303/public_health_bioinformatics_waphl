@@ -75,8 +75,10 @@ workflow ksnp4_workflow {
     File ksnp4_pan_snp_matrix = pan_reorder_matrix.ordered_matrix
     File ksnp4_pan_tree = pan_reorder_matrix.tree
     # optional tree outputs
-    File? ksnp4_ml_tree = ksnp4_task.ksnp4_ml_tree
-    File? ksnp4_nj_tree = ksnp4_task.ksnp4_nj_tree
+    File? ksnp4_ml_core_tree = ksnp4_task.ksnp4_ml_core_tree
+    File? ksnp4_ml_pan_tree = ksnp4_task.ksnp4_ml_pan_tree
+    File? ksnp4_nj_core_tree = ksnp4_task.ksnp4_nj_core_tree
+    File? ksnp4_nj_pan_tree = ksnp4_task.ksnp4_nj_pan_tree
     # data summary output 
     File? ksnp4_summarized_data = summarize_data.summarized_data
     File? ksnp4_filtered_metadata = summarize_data.filtered_metadata
