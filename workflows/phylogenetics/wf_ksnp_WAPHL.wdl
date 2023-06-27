@@ -65,7 +65,7 @@ workflow ksnp4_workflow {
     String ksnp4_wf_version = version_capture.phb_version
     String ksnp4_wf_analysis_date = version_capture.date
     String ksnp4_docker = ksnp4_task.ksnp4_docker_image
-    # ksnp3_outputs
+    # ksnp4_outputs
     String ksnp4_snp_dists_version = pan_snp_dists.snp_dists_version
     File ksnp4_core_vcf = ksnp4_task.ksnp4_core_vcf
     String ksnp4_core_snp_matrix_status = ksnp4_task.skip_core_snp_dists
@@ -75,10 +75,10 @@ workflow ksnp4_workflow {
     File ksnp4_pan_snp_matrix = pan_reorder_matrix.ordered_matrix
     File ksnp4_pan_tree = pan_reorder_matrix.tree
     # optional tree outputs
-    File? ksnp3_ml_tree = ksnp3_task.ksnp3_ml_tree
-    File? ksnp3_nj_tree = ksnp3_task.ksnp3_nj_tree
+    File? ksnp4_ml_tree = ksnp4_task.ksnp4_ml_tree
+    File? ksnp4_nj_tree = ksnp4_task.ksnp4_nj_tree
     # data summary output 
-    File? ksnp3_summarized_data = summarize_data.summarized_data
-    File? ksnp3_filtered_metadata = summarize_data.filtered_metadata
+    File? ksnp4_summarized_data = summarize_data.summarized_data
+    File? ksnp4_filtered_metadata = summarize_data.filtered_metadata
   }
 }
