@@ -67,7 +67,7 @@ workflow ksnp4_workflow {
     String ksnp4_docker = ksnp4_task.ksnp4_docker_image
     # ksnp4_outputs
     String ksnp4_snp_dists_version = pan_snp_dists.snp_dists_version
-    File ksnp4_core_vcf = ksnp4_task.ksnp4_core_vcf
+    File ksnp4_core_vcf = ksnp4_task.ksnp4_vcf
     String ksnp4_core_snp_matrix_status = ksnp4_task.skip_core_snp_dists
     # ordered matrixes and reordered trees
     File? ksnp4_core_snp_matrix = core_reorder_matrix.ordered_matrix
