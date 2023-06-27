@@ -102,7 +102,7 @@ task ksnp4 {
     File? ksnp4_ml_core_tree = "ksnp4/~{cluster_name}_core_ML.nwk"
     File? ksnp4_ml_pan_tree = "ksnp4/~{cluster_name}_pan_ML.nwk"
     File? ksnp4_nj_core_tree = "ksnp4/~{cluster_name}_core_NJ.nwk"
-    File? ksnp4_nj_tree = "ksnp4/~{cluster_name}_pan_NJ.nwk"
+    File? ksnp4_nj_pan_tree = "ksnp4/~{cluster_name}_pan_NJ.nwk"
     File number_snps = "ksnp4/COUNT_SNPs"
     File ksnp4_input = "ksnp4_input.tsv"
     String skip_core_snp_dists = read_string("SKIP_SNP_DIST")
