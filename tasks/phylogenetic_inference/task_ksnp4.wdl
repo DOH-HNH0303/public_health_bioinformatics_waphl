@@ -53,6 +53,8 @@ task ksnp4 {
   echo "ls ksnp4"
   ls ksnp4
   echo ""
+  ls *core_SNPs
+  echo ""
   
   # rename ksnp4 outputs with cluster name 
   # sometimes the core nwk and fasta outputs do not have content
