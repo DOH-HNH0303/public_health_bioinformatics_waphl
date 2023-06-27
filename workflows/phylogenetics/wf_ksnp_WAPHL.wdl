@@ -22,11 +22,11 @@ workflow ksnp4_workflow {
       samplename = samplename,
       cluster_name = cluster_name
   }
-  if (ksnp3_task.skip_core_snp_dists == "The core SNP matrix was produced") {
+  if (ksnp4_task.skip_core_snp_dists == "The core SNP matrix was produced") {
     call snp_dists.snp_dists as core_snp_dists {
       input:
         cluster_name = cluster_name,
-        alignment = ksnp3_task.ksnp3_core_matrix
+        alignment = ksnp4_task.ksnp4_core_matrix
     }
     call reorder_matrix.reorder_matrix as core_reorder_matrix {
       input:
