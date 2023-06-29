@@ -49,7 +49,7 @@ task ksnp4 {
   cat ksnp4_input.tsv
 
   # run ksnp4 on input assemblies
-  kSNP4 -in ksnp4_input.tsv -outdir ksnp4 -k ~{kmer_size} -core -vcf ~{ksnp4_args}
+  kSNP4 -in ksnp4_input.tsv -outdir ksnp4 -k ~{kmer_size} -core -vcf ~{ksnp4_args} -debug
 
   echo "ls ksnp4"
   ls ksnp4
@@ -66,6 +66,9 @@ task ksnp4 {
   else
     echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST # otherwise, skip
     cat ~{cluster_name}_core_SNPs_matrix.fasta
+    # if [ ! -z $(grep "$STRING" "$FILE") ]; then 
+    #   echo "FOUND"
+    # fi
   fi
 
   mv -v ksnp4/VCF.*.vcf ksnp4/~{cluster_name}_core.vcf
