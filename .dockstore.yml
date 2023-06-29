@@ -266,12 +266,11 @@ workflows:
    primaryDescriptorPath: /workflows/utilities/data_import/wf_assembly_fetch.wdl
    testParameterFiles:
     - empty.json
- - name: Recomb_aware_phylo_analysis_waphl
+ - name: RECAPP
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_recombinant_aware_phylogenetic_analysis_waphl.wdl
+   primaryDescriptorPath: /workflows/phylogenetics/wf_RECAPP_waphl.wdl
    testParameterFiles:
-    - empty.json
-    
+    - empty.json  
  - name: recomb_clade_analysis
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_clade_analysis_WAPHL.wdl
