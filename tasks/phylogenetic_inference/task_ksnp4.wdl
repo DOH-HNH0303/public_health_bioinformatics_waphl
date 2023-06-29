@@ -71,9 +71,17 @@ task ksnp4 {
     # fi
   fi
 
+
+
   mv -v ksnp4/VCF.*.vcf ksnp4/~{cluster_name}_core.vcf
   mv -v ksnp4/SNPs_all_matrix.fasta ksnp4/~{cluster_name}_pan_SNPs_matrix.fasta
   mv -v ksnp4/tree.parsimony.tre ksnp4/~{cluster_name}_pan_parsimony.nwk
+
+  if [ -s ksnp4/~{cluster_name}_pan_parsimony.nwk ]; then # is the file not-empty?
+    echo "The pan SNP nwk was produced" | tee SKIP_PAN_REORDER_MATRIX # then do NOT skip
+  else
+    echo "The pan SNP nwk could not be produced" | tee SKIP_PAN_REORDER_MATRIX # otherwise, skip
+  fi
 
   if [ -f ksnp4/tree.SNPs_all.ML.tre ]; then  
     mv -v ksnp4/tree.SNPs_all.ML.tre ksnp4/~{cluster_name}_pan_ML.nwk
@@ -103,6 +111,7 @@ task ksnp4 {
     File number_snps = "ksnp4/COUNT_SNPs"
     File ksnp4_input = "ksnp4_input.tsv"
     String skip_core_snp_dists = read_string("SKIP_SNP_DIST")
+    String skip_pan_reorder_matrix = read_string("SKIP_PAN_REORDER_MATRIX")
     Array[File] ksnp_outs = glob("ksnp4/*")
     String ksnp4_docker_image = docker_image
   }

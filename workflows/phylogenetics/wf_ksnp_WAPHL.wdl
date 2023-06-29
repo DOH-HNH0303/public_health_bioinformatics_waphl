@@ -40,6 +40,7 @@ workflow ksnp4_workflow {
       cluster_name = cluster_name,
       alignment = ksnp4_task.ksnp4_pan_matrix
   }
+  if (ksnp4_task.skip_pan_reorder_matrix == "The pan SNP nwk was produced") {
   call reorder_matrix.reorder_matrix as pan_reorder_matrix {
     input:
       input_tree = ksnp4_task.ksnp4_pan_parsimony_tree,
@@ -72,8 +73,8 @@ workflow ksnp4_workflow {
     # ordered matrixes and reordered trees
     File? ksnp4_core_snp_matrix = core_reorder_matrix.ordered_matrix
     File? ksnp4_core_tree = core_reorder_matrix.tree
-    File ksnp4_pan_snp_matrix = pan_reorder_matrix.ordered_matrix
-    File ksnp4_pan_tree = pan_reorder_matrix.tree
+    File? ksnp4_pan_snp_matrix = pan_reorder_matrix.ordered_matrix
+    File? ksnp4_pan_tree = pan_reorder_matrix.tree
     # optional tree outputs
     File? ksnp4_ml_core_tree = ksnp4_task.ksnp4_ml_core_tree
     File? ksnp4_ml_pan_tree = ksnp4_task.ksnp4_ml_pan_tree
