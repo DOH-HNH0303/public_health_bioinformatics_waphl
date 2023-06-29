@@ -1,16 +1,16 @@
 version 1.0
 
-import "../tasks/phylogenetic_inference/task_ska.wdl" as ska
-import "../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
-import "../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
-import "../tasks/phylogenetic_inference/task_pirate.wdl" as pirate
-import "../tasks/phylogenetic_inference/task_snp_dists.wdl" as snp_dists
-import "../tasks/task_versioning.wdl" as versioning
-import "../tasks/utilities/task_utilities.wdl" as utilities
-import "../tasks/gene_typing/task_prokka.wdl" as prokka
-import "../tasks/phylogenetic_inference/task_ksnp3.wdl" as ksnp3
-import "../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
-import "../tasks/utilities/task_report_waphl.wdl" as report
+import "../../tasks/phylogenetic_inference/task_ska.wdl" as ska
+import "../../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
+import "../../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
+import "../../tasks/phylogenetic_inference/task_pirate.wdl" as pirate
+import "../../tasks/phylogenetic_inference/task_snp_dists.wdl" as snp_dists
+import "../../tasks/task_versioning.wdl" as versioning
+import "../../tasks/utilities/task_utilities.wdl" as utilities
+import "../../tasks/gene_typing/task_prokka.wdl" as prokka
+import "../../tasks/phylogenetic_inference/task_ksnp3.wdl" as ksnp3
+import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
+import "../../tasks/utilities/task_report_waphl.wdl" as report
 
 
 workflow clade_analysis {
