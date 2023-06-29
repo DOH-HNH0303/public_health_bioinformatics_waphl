@@ -29,5 +29,6 @@ task snp_dists {
     disk: disk_size + " GB"
     maxRetries: 3
     preemptible: 0
+    continueOnReturnCode: [0, 1]
   }
 }
