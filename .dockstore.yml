@@ -273,7 +273,7 @@ workflows:
     - empty.json  
  - name: recomb_clade_analysis
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_clade_analysis_WAPHL.wdl
+   primaryDescriptorPath: /workflows/phylogenetics/wf_clade_analysis_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: fetch_from_zip
