@@ -66,7 +66,7 @@ task ksnp4 {
   else
      # otherwise, skip
     cat ~{cluster_name}_core_SNPs_matrix.fasta
-    if [ ! -z $(grep "Number core SNPs: 0" "ksnp4/COUNT_coreSNPs") ]; then 
+    if grep -Fxq "Number core SNPs: 0" ksnp4/COUNT_coreSNPs; then 
       echo "Number core SNPs: 0" | tee SKIP_SNP_DIST
     else
       echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST
@@ -83,7 +83,7 @@ task ksnp4 {
     echo "The pan SNP nwk was produced" | tee SKIP_PAN_REORDER_MATRIX # then do NOT skip
   else
     echo "The pan SNP nwk could not be produced" | tee SKIP_PAN_REORDER_MATRIX # otherwise, skip
-    if [ ! -z $(grep "Number_SNPs: 0" "ksnp4/COUNT_SNPs") ]; then 
+    if grep -Fxq "Number_SNPs: 0" ksnp4/COUNT_SNPs; then 
       echo "Number_SNPs: 0" | tee SKIP_PAN_REORDER_MATRIX
     else
       echo "The pan SNP matrix could not be produced" | tee SKIP_PAN_REORDER_MATRIX
