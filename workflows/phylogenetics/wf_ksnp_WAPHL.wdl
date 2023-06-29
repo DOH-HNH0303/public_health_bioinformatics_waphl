@@ -47,6 +47,7 @@ workflow ksnp4_workflow {
       matrix = pan_snp_dists.snp_matrix,
       cluster_name = cluster_name + "_pan"
   }
+  }
   if (defined(data_summary_column_names)) {
     call data_summary.summarize_data {
       input:
@@ -70,6 +71,7 @@ workflow ksnp4_workflow {
     String ksnp4_snp_dists_version = pan_snp_dists.snp_dists_version
     File? ksnp4_core_vcf = ksnp4_task.ksnp4_vcf
     String ksnp4_core_snp_matrix_status = ksnp4_task.skip_core_snp_dists
+    
     # ordered matrixes and reordered trees
     File? ksnp4_core_snp_matrix = core_reorder_matrix.ordered_matrix
     File? ksnp4_core_tree = core_reorder_matrix.tree
