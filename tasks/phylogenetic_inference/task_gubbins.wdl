@@ -56,8 +56,6 @@ task gubbins_old {
   }
 }
 
-version 1.0
-
 task gubbins {
   input {
     File alignment
