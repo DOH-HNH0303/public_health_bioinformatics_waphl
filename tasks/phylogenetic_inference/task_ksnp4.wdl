@@ -64,11 +64,13 @@ task ksnp4 {
   if [ -s ksnp4/~{cluster_name}_core_SNPs_matrix.fasta ]; then # is the file not-empty?
     echo "The core SNP matrix was produced" | tee SKIP_SNP_DIST # then do NOT skip
   else
-    echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST # otherwise, skip
+     # otherwise, skip
     cat ~{cluster_name}_core_SNPs_matrix.fasta
-    # if [ ! -z $(grep "$STRING" "$FILE") ]; then 
-    #   echo "FOUND"
-    # fi
+    if [ ! -z $(grep "Number core SNPs: 0" "ksnp4/COUNT_coreSNPs") ]; then 
+      echo "Number core SNPs: 0" | tee SKIP_SNP_DIST
+    else
+      echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST
+    fi
   fi
 
 
@@ -81,6 +83,11 @@ task ksnp4 {
     echo "The pan SNP nwk was produced" | tee SKIP_PAN_REORDER_MATRIX # then do NOT skip
   else
     echo "The pan SNP nwk could not be produced" | tee SKIP_PAN_REORDER_MATRIX # otherwise, skip
+    if [ ! -z $(grep "Number_SNPs: 0" "ksnp4/COUNT_SNPs") ]; then 
+      echo "Number_SNPs: 0" | tee SKIP_PAN_REORDER_MATRIX
+    else
+      echo "The pan SNP matrix could not be produced" | tee SKIP_PAN_REORDER_MATRIX
+    fi
   fi
 
   if [ -f ksnp4/tree.SNPs_all.ML.tre ]; then  
