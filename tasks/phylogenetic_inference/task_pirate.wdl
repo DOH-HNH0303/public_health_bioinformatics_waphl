@@ -37,6 +37,7 @@ task pirate {
   # generate gene_presence_absence.csv
   PIRATE_to_roary.pl -i PIRATE/PIRATE.*.tsv -o ~{cluster_name}_gene_presence_absence.csv
   
+  ls PIRATE
   # rename outputs with cluster name 
   mv PIRATE/PIRATE.pangenome_summary.txt PIRATE/~{cluster_name}_pangenome_summary.txt
   mv PIRATE/PIRATE.log PIRATE/~{cluster_name}.log
