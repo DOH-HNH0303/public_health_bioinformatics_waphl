@@ -66,7 +66,7 @@ call ksnp.ksnp4_workflow as ksnp4  {
       cluster_name = cluster_name,
       iqtree_model = iqtree_model
   }
-if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced")
+if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){}
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix,
@@ -89,7 +89,7 @@ call clade_analysis.clade_analysis as clade_analysis  {
     prokka_gff = scatter_by_clade.clade_files,
     samplename = scatter_by_clade.samplename
 }
-
+}
 }
 if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
   call unilities.pipeline_note as pipeline_note  {
