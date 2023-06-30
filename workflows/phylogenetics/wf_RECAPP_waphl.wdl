@@ -1,14 +1,14 @@
 version 1.0
 
 import "wf_clade_analysis_WAPHL.wdl" as clade_analysis
-import "../tasks/phylogenetic_inference/task_ska.wdl" as ska
-import "../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
-import "../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
-import "../tasks/task_versioning.wdl" as versioning
-import "wf_ksnp3_WAPHL.wdl" as ksnp3
-import "../tasks/utilities/task_utilities.wdl" as utilities
-import "../tasks/task_versioning.wdl" as versioning
-import "../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
+import "../../tasks/phylogenetic_inference/task_ska.wdl" as ska
+import "../../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
+import "../../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
+import "../../tasks/task_versioning.wdl" as versioning
+import "wf_ksnp4_WAPHL.wdl" as ksnp
+import "../../tasks/utilities/task_utilities.wdl" as utilities
+import "../../tasks/task_versioning.wdl" as versioning
+import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 
 workflow recomb_aware_phylo_analysis {
   input {
@@ -54,7 +54,7 @@ call gubbins.maskrc_svg as mask_gubbins_init  {
     gubbins_node_tre = gubbins_init.gubbins_node_tre
 }
 }
-call ksnp3.ksnp3_workflow as ksnp3  {
+call ksnp.ksnp4_workflow as ksnp4  {
   input:
     assembly_fasta = select_first([mask_gubbins_init.masked_fasta_list, assembly_fasta]),
     samplename = samplename,
@@ -62,13 +62,13 @@ call ksnp3.ksnp3_workflow as ksnp3  {
 }
   call iqtree.iqtree as total_iqtree {
     input:
-      alignment = ksnp3.ksnp3_core_matrix,
+      alignment = ksnp4.ksnp4_core_matrix,
       cluster_name = cluster_name,
       iqtree_model = iqtree_model
   }
 call utilities.split_by_clade as split_by_clade  {
   input:
-    snp_matrix = ksnp3.ksnp3_core_snp_matrix,
+    snp_matrix = ksnp4.ksnp4_core_snp_matrix,
     cluster_name = cluster_name,
     snp_clade = snp_clade
 }
@@ -106,9 +106,9 @@ call versioning.waphl_version_capture as version {
     input_1 = ska.ska_docker_image,
     input_2 = gubbins_init.gubbins_docker_image,
     input_3 = mask_gubbins_init.maskrc_docker_image,
-    input_4 = ksnp3.ksnp3_docker,
+    input_4 = ksnp4.ksnp4_docker,
     input_5 = total_iqtree.version,
-    input_6 = ksnp3.ksnp3_snp_dists_version,
+    input_6 = ksnp4.ksnp4_snp_dists_version,
     input_7 = split_by_clade.split_clade_docker_image,
     input_8 = select_first(scatter_by_clade.scatter_clade_docker_image),
     input_9 = select_first(clade_analysis.pirate_docker_image),
