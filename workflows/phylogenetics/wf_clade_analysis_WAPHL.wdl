@@ -187,7 +187,7 @@ if (pan == true) {
     File pirate_aln_pan = pirate.pirate_pangenome_alignment_gff
     File pirate_aln_core = pirate.pirate_core_alignment_gff
     File pirate_gene_families_ordered = pirate.pirate_gene_families_ordered
-    String pirate_gene_presence_absence = pirate.pirate_gene_presence_absence
+    File pirate_gene_presence_absence = pirate.pirate_gene_presence_absence
     # snp_dists outputs
     String? clade_snps_dists_version = select_first([core_snp_dists.snp_dists_version, pan_snp_dists.snp_dists_version])#core_snp_dists.version
     File? clade_core_snp_matrix = core_snp_dists.snp_matrix
