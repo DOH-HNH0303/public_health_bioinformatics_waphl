@@ -67,6 +67,7 @@ workflow ksnp4_workflow {
     String ksnp4_wf_version = version_capture.phb_version
     String ksnp4_wf_analysis_date = version_capture.date
     String ksnp4_docker = ksnp4_task.ksnp4_docker_image
+    
     # ksnp4_outputs
     String ksnp4_snp_dists_version = pan_snp_dists.snp_dists_version
     File? ksnp4_core_vcf = ksnp4_task.ksnp4_vcf

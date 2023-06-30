@@ -66,12 +66,14 @@ call ksnp.ksnp4_workflow as ksnp4  {
       cluster_name = cluster_name,
       iqtree_model = iqtree_model
   }
+if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced")
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix,
     cluster_name = cluster_name,
     snp_clade = snp_clade
 }
+
 scatter (pair in zip(split_by_clade.clade_list, range(length(split_by_clade.clade_list)))) {
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
@@ -79,6 +81,7 @@ call utilities.scatter_by_clade as scatter_by_clade  {
     cluster_name = cluster_name,
     assembly_files = assembly_gff
 }
+
 call clade_analysis.clade_analysis as clade_analysis  {
   input:
     cluster_name = "~{cluster_name + '_' + pair.right + '_'}clade",
@@ -88,6 +91,12 @@ call clade_analysis.clade_analysis as clade_analysis  {
 }
 
 }
+if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
+  call unilities.pipeline_note as pipeline_note  {
+  input:
+    note = "Number core SNPs: 0, no trees could be produced."
+}
+
 call summarize.zip_files as zip_files  {
   input:
     clade_trees = select_all(clade_analysis.clade_iqtree_pan_tree),

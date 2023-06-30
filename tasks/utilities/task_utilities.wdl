@@ -344,3 +344,31 @@ task concat_fastq {
     maxRetries: 3
   }
 }
+
+task run_note {
+  input {
+    String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
+    String note = ""
+
+  }
+  command <<<
+    date | tee DATE
+    touch none.txt
+    echo "~{note}" | tee PIPELINE_NOTE
+  >>>
+  output {
+    String date = read_string("DATE")
+    File none_file = "none.txt"
+    String none_string = ""
+    String none_docker_image = "~docker"
+    String pipeline_note = read_string("PIPELINE_NOTE")
+  }
+  runtime {
+    docker: docker
+    memory: "8GB"
+    cpu: 2
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
+  }
+}
