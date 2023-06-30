@@ -156,16 +156,16 @@ call versioning.waphl_version_capture as version {
     Array[File] pirate_aln_pan = clade_analysis.pirate_aln_pan
     Array[File] pirate_aln_core = clade_analysis.pirate_aln_core
     # snp_dists outputs
-    Array[String?] clade_snps_dists_version = select_all(clade_analysis.clade_snps_dists_version)
-    Array[File?] clade_core_snp_matrix = select_all(clade_analysis.clade_core_snp_matrix)
+    Array[String?]? clade_snps_dists_version = select_all(clade_analysis.clade_snps_dists_version)
+    Array[File?]? clade_core_snp_matrix = select_all(clade_analysis.clade_core_snp_matrix)
     Array[File?]? clade_pan_snp_matrix = select_all(clade_analysis.clade_pan_snp_matrix)
     # iqtree outputs
-    Array[String?] clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
-    Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
-    Array[File?] clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
-    Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
-    Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
-    Array[File?] plot_roary = clade_analysis.plot_roary
+    Array[String?]? clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
+    Array[File?]? clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
+    Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
+    Array[String?]? clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
+    Array[String?]? clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
+    Array[File?]? plot_roary = clade_analysis.plot_roary
     File tool_versions = version.input_file
     File zipped_output = zip_files.zipped_output
 
