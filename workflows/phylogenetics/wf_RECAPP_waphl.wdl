@@ -96,6 +96,7 @@ if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
   input:
     note = "Number core SNPs: 0, no trees could be produced."
 }
+}
 
 call summarize.zip_files as zip_files  {
   input:
