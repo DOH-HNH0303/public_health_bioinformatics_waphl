@@ -60,13 +60,14 @@ call ksnp.ksnp4_workflow as ksnp4  {
     samplename = samplename,
     cluster_name = cluster_name
 }
+if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
   call iqtree.iqtree as total_iqtree {
     input:
       alignment = ksnp4.ksnp4_core_matrix,
       cluster_name = cluster_name,
       iqtree_model = iqtree_model
   }
-if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
+
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix,
