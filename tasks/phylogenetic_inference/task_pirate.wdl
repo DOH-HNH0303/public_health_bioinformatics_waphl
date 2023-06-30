@@ -45,13 +45,10 @@ task pirate {
   mv PIRATE/binary_presence_absence.fasta PIRATE/~{cluster_name}_binary_presence_absence.fasta
   mv PIRATE/binary_presence_absence.nwk PIRATE/~{cluster_name}_binary_presence_absence.nwk
   mv PIRATE/pangenome.gfa PIRATE/~{cluster_name}_pangenome.gfa
-
-  #if [[ ~{align} == "true" ]]; then
   mv PIRATE/pangenome_alignment.fasta PIRATE/~{cluster_name}_pangenome_alignment.fasta
   mv PIRATE/pangenome_alignment.gff PIRATE/~{cluster_name}_pangenome_alignment.gff
   mv PIRATE/core_alignment.fasta PIRATE/~{cluster_name}_core_alignment.fasta
   mv PIRATE/core_alignment.gff PIRATE/~{cluster_name}_core_alignment.gff
-  #fi
 
   >>>
   output {
