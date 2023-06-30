@@ -48,7 +48,6 @@ task iqtree_old {
   }
 }
 
-version 1.0
 
 task iqtree {
   input {
