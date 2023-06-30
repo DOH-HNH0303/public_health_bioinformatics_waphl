@@ -92,7 +92,7 @@ call clade_analysis.clade_analysis as clade_analysis  {
 }
 }
 if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
-  call unilities.pipeline_note as pipeline_note  {
+  call utilities.run_note as pipeline_note  {
   input:
     note = "Number core SNPs: 0, no trees could be produced."
 }
@@ -167,5 +167,7 @@ call versioning.waphl_version_capture as version {
     Array[File?] plot_roary = clade_analysis.plot_roary
     File tool_versions = version.input_file
     File zipped_output = zip_files.zipped_output
+
+    String? pipeline_note = pipeline_note.pipeline_note
   }
 }

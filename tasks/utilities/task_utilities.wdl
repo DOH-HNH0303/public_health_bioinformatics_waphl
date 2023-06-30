@@ -358,9 +358,7 @@ task run_note {
   >>>
   output {
     String date = read_string("DATE")
-    File none_file = "none.txt"
-    String none_string = ""
-    String none_docker_image = "~docker"
+    String note_docker_image = "~docker"
     String pipeline_note = read_string("PIPELINE_NOTE")
   }
   runtime {
