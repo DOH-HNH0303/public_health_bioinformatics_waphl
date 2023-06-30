@@ -133,7 +133,7 @@ if (pan == true) {
   input:
     recomb_gff = select_all([gubbins_clade.recomb_gff]),
     pirate_aln_gff = select_all([pirate.pirate_pangenome_alignment_gff]),
-    pirate_gene_presence_absence = select_all([pirate.pirate_for_scoary_csv]),
+    pirate_gene_presence_absence = select_all([pirate.pirate_presence_absence_csv]),
     cluster_name = cluster_name,
     cluster_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree]),
     #terra_table = terra_table,
@@ -146,7 +146,7 @@ if (pan == true) {
   input:
     recomb_gff = gubbins_clade.recomb_gff,
     pirate_aln_gff = pirate.pirate_pangenome_alignment_gff,
-    pirate_for_scoary_csv = pirate.pirate_for_scoary_csv,
+    pirate_gene_presence_absence = pirate.pirate_presence_absence_csv,
     cluster_name = cluster_name,
     treefile = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree])
     #terra_table = terra_table,
@@ -187,7 +187,7 @@ if (pan == true) {
     File pirate_aln_pan = pirate.pirate_pangenome_alignment_gff
     File pirate_aln_core = pirate.pirate_core_alignment_gff
     File pirate_gene_families_ordered = pirate.pirate_gene_families_ordered
-    String pirate_for_scoary_csv = pirate.pirate_for_scoary_csv
+    String pirate_gene_presence_absence = pirate.pirate_gene_presence_absence
     # snp_dists outputs
     String? clade_snps_dists_version = select_first([core_snp_dists.snp_dists_version, pan_snp_dists.snp_dists_version])#core_snp_dists.version
     File? clade_core_snp_matrix = core_snp_dists.snp_matrix
