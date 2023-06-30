@@ -143,7 +143,7 @@ task join_genus_species {
 
 task split_by_clade {
   input {
-    File snp_matrix
+    File? snp_matrix
     String cluster_name
     String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
     Int threads = 6
