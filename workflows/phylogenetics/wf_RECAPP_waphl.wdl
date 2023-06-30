@@ -5,7 +5,7 @@ import "../../tasks/phylogenetic_inference/task_ska.wdl" as ska
 import "../../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
 import "../../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
 import "../../tasks/task_versioning.wdl" as versioning
-import "wf_ksnp4_WAPHL.wdl" as ksnp
+import "wf_ksnp_WAPHL.wdl" as ksnp
 import "../../tasks/utilities/task_utilities.wdl" as utilities
 import "../../tasks/task_versioning.wdl" as versioning
 import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
