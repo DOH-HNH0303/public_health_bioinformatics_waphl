@@ -248,7 +248,7 @@ task plot_roary_waphl {
     File treefile
     File? recomb_gff
     File? pirate_aln_gff
-    File? pirate_gene_presence_absence
+    File? pirate_presence_absence_csv
     String docker = "hnh0303/plot_roary_waphl:1.0"
     Int threads = 6
     String? stripped = basename(treefile, ".tree") 
@@ -260,7 +260,7 @@ task plot_roary_waphl {
     python ../roary_plots_waphl.py \
     ~{'--recombinants ' + recomb_gff} \
     ~{treefile} \
-    ~{pirate_gene_presence_absence} \
+    ~{pirate_presence_absence_csv} \
     ~{pirate_aln_gff}
 
     if  [[ "~{stripped}" != "None" ]]; then   
@@ -290,7 +290,7 @@ task save_output {
     File treefile
     File? recomb_gff
     File pirate_aln_gff
-    File pirate_gene_presence_absence
+    File pirate_presence_absence_csv
     String cluster_name
     String docker = "hnh0303/plot_roary_waphl:1.0"
     Int threads = 6
@@ -303,7 +303,7 @@ task save_output {
     python ../roary_plots_waphl.py \
     ~{'--recombinants' + recomb_gff} \
     ~{treefile} \
-    ~{pirate_gene_presence_absence} \
+    ~{pirate_presence_absence_csv} \
     ~{pirate_aln_gff}
 
    
