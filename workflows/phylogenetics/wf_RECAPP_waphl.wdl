@@ -145,9 +145,9 @@ call versioning.waphl_version_capture as version {
 
     File clade_list_file = split_by_clade.clade_list_file
 
-    Array[File?] gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
-    Array[File?] gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
-    Array[File?] gubbins_clade_recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff)
+    Array[File?]? gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
+    Array[File?]? gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
+    Array[File?]? gubbins_clade_recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff)
 
     Array[File] pirate_pangenome_summary = select_all(clade_analysis.pirate_pangenome_summary)
     Array[File] pirate_gene_families_ordered = select_all(clade_analysis.pirate_gene_families_ordered)
