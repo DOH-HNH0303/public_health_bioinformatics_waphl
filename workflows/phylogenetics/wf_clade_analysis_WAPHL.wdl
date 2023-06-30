@@ -181,7 +181,7 @@ if (pan == true) {
     String? maskrc_docker_image = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string])
     String? ksnp3_docker_image = ksnp3_clade_core.ksnp3_docker_image
     String? iqtree_version = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version])
-    String? snp_dist_version = select_first([pan_snp_dists.version, core_snp_dists.version])
+    String? snp_dist_version = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version])
 
     File pirate_pangenome_summary = pirate.pirate_pangenome_summary
     File pirate_aln_pan = pirate.pirate_pangenome_alignment_gff
@@ -189,7 +189,7 @@ if (pan == true) {
     File pirate_gene_families_ordered = pirate.pirate_gene_families_ordered
     String pirate_for_scoary_csv = pirate.pirate_for_scoary_csv
     # snp_dists outputs
-    String? clade_snps_dists_version = select_first([core_snp_dists.version, pan_snp_dists.version])#core_snp_dists.version
+    String? clade_snps_dists_version = select_first([core_snp_dists.snp_dists_version, pan_snp_dists.snp_dists_version])#core_snp_dists.version
     File? clade_core_snp_matrix = core_snp_dists.snp_matrix
     File? clade_pan_snp_matrix = pan_snp_dists.snp_matrix
     # iqtree outputs
