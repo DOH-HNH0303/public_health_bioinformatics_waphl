@@ -8,7 +8,7 @@ import "../../tasks/phylogenetic_inference/task_snp_dists.wdl" as snp_dists
 import "../../tasks/task_versioning.wdl" as versioning
 import "../../tasks/utilities/task_utilities.wdl" as utilities
 import "../../tasks/gene_typing/task_prokka.wdl" as prokka
-import "../../tasks/phylogenetic_inference/task_ksnp3.wdl" as ksnp3
+import "../../tasks/phylogenetic_inference/task_ksnp4.wdl" as ksnp4
 import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 import "../../tasks/utilities/task_report_waphl.wdl" as report
 
@@ -20,7 +20,7 @@ workflow clade_analysis {
     Array[String] samplename
     String iqtree_model = "MFP"
     Boolean? core = true
-    Boolean? pan = false
+    Boolean? pan = true
     String cluster_name
     Float filter_perc = 25.0
     Boolean summarize = true
@@ -97,7 +97,7 @@ if (pan == true) {
           gubbins_log = gubbins_clade.gubbins_log,
           gubbins_node_tre = gubbins_clade.gubbins_node_tre
       }
-      call ksnp3.ksnp3 as ksnp3_clade_core {
+      call ksnp4.ksnp4 as ksnp4_clade_core {
         input:
           assembly_fasta = core_mask_gubbins_clade.masked_fasta_list,
           samplename = samplename,
@@ -105,7 +105,7 @@ if (pan == true) {
       }
       call iqtree.iqtree as masked_core_iqtree {
         input:
-          alignment =ksnp3_clade_core.ksnp3_core_matrix,
+          alignment =ksnp4_clade_core.ksnp4_core_matrix,
           cluster_name = cluster_name,
           iqtree_model = iqtree_model,
           details = "masked_core_"
@@ -122,7 +122,7 @@ if (pan == true) {
     }
     call snp_dists.snp_dists as core_snp_dists {
       input:
-        alignment = select_first([ksnp3_clade_core.ksnp3_core_matrix,pirate.pirate_core_alignment_fasta]),
+        alignment = select_first([ksnp4_clade_core.ksnp4_core_matrix,pirate.pirate_core_alignment_fasta]),
         cluster_name = cluster_name
     }
   call utilities.generate_none {
@@ -159,7 +159,7 @@ if (pan == true) {
       input_1 = pirate.pirate_docker_image,
       input_2 = gubbins_clade.gubbins_docker_image,
       input_3 = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string]),
-      input_4 = ksnp3_clade_core.ksnp3_docker_image,
+      input_4 = ksnp4_clade_core.ksnp4_docker_image,
       input_5 = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version]),
       input_6 = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version]),
       input_7 = plot_roary.plot_roary_docker_image
@@ -179,7 +179,7 @@ if (pan == true) {
     String pirate_docker_image = pirate.pirate_docker_image
     String gubbins_docker_image = gubbins_clade.gubbins_docker_image
     String? maskrc_docker_image = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string])
-    String? ksnp3_docker_image = ksnp3_clade_core.ksnp3_docker_image
+    String? ksnp4_docker_image = ksnp4_clade_core.ksnp4_docker_image
     String? iqtree_version = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version])
     String? snp_dist_version = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version])
 
@@ -195,8 +195,8 @@ if (pan == true) {
     # iqtree outputs
     String? clade_iqtree_version = select_first([unmasked_pan_iqtree.version, masked_pan_iqtree.version, unmasked_core_iqtree.version, masked_core_iqtree.version])#pan_iqtree.version
     File? clade_iqtree_core_tree = select_first([masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree])#core_iqtree.ml_tree
-    File? clade_iqtree_pan_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree])#pan_iqtree.ml_tree
-    String? clade_iqtree_pan_model = select_first([masked_pan_iqtree.iqtree_model_used, unmasked_pan_iqtree.iqtree_model_used])#pan_iqtree.iqtree_model
+    File? clade_iqtree_pan_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, generate_none.none_string])#pan_iqtree.ml_tree
+    String? clade_iqtree_pan_model = select_first([masked_pan_iqtree.iqtree_model_used, unmasked_pan_iqtree.iqtree_model_used, generate_none.none_string])#pan_iqtree.iqtree_model
     String? clade_iqtree_core_model = select_first([masked_core_iqtree.iqtree_model_used, unmasked_core_iqtree.iqtree_model_used])#core_iqtree.iqtree_model
     File? software_versions_clade_analysis = version.tool_versions
     File? clade_zipped_output = zip_files.zipped_output
