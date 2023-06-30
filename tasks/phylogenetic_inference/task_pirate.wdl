@@ -30,7 +30,7 @@ task pirate {
   ~{'--steps ' + steps} \
   ~{'--features ' + features} \
   ~{true="--nucl" false="" nucl} \
-  true="--align" \
+  --align \
   ~{'--pan-opt ' + panopt} \
   ~{'--threads ' + cpu} 
    
