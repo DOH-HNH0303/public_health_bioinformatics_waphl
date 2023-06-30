@@ -51,7 +51,7 @@ task iqtree_old {
 
 task iqtree {
   input {
-    File alignment
+    File? alignment
     String cluster_name
     String iqtree_model = "GTR+I+G" # For comparison to other tools use HKY for bactopia, GTR+F+I for grandeur, GTR+G4 for nullarbor, GTR+G for dryad
     String iqtree_bootstraps = 1000 #  Ultrafast bootstrap replicates
