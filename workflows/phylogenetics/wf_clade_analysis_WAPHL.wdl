@@ -161,7 +161,7 @@ if (pan == true) {
       input_3 = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string]),
       input_4 = ksnp3_clade_core.ksnp3_docker_image,
       input_5 = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version]),
-      input_6 = select_first([pan_snp_dists.version, core_snp_dists.version]),
+      input_6 = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version]),
       input_7 = plot_roary.plot_roary_docker_image
     }
   }
