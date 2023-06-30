@@ -72,6 +72,10 @@ workflow ksnp4_workflow {
     File? ksnp4_core_vcf = ksnp4_task.ksnp4_vcf
     String ksnp4_core_snp_matrix_status = ksnp4_task.skip_core_snp_dists
     
+    # ksnp4 fasta matrices
+    File? ksnp4_core_matrix = ksnp4_task.ksnp4_core_matrix
+    File? ksnp4_pan_matrix = ksnp4_task.ksnp4_pan_matrix
+
     # ordered matrixes and reordered trees
     File? ksnp4_core_snp_matrix = core_reorder_matrix.ordered_matrix
     File? ksnp4_core_tree = core_reorder_matrix.tree
