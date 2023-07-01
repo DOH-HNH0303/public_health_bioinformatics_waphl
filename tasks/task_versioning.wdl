@@ -28,7 +28,7 @@ task version_capture {
 
 task waphl_version_capture {
   input {
-    String input_1
+    String? input_1
     String? input_2
     String? input_3
     String? input_4
