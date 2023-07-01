@@ -112,6 +112,7 @@ call summarize.zip_files as zip_files  {
     #terra_project = terra_project,
     
 }
+if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
 call versioning.waphl_version_capture as version {
   input:
     input_1 = ska.ska_docker_image,
@@ -126,6 +127,18 @@ call versioning.waphl_version_capture as version {
     input_11 = select_first(clade_analysis.maskrc_docker_image),
     input_13 = select_first(clade_analysis.iqtree_version),
     input_14 = select_first(clade_analysis.snp_dist_version)
+  }
+  }
+  if ( ksnp4.ksnp4_core_snp_matrix_status != "The core SNP matrix was produced"){
+call versioning.waphl_version_capture as version {
+  input:
+    input_1 = ska.ska_docker_image,
+    input_2 = gubbins_init.gubbins_docker_image,
+    input_3 = mask_gubbins_init.maskrc_docker_image,
+    input_4 = ksnp4.ksnp4_docker,
+    input_5 = total_iqtree.version,
+    input_6 = ksnp4.ksnp4_snp_dists_version
+  }
   }
   output {
     File ska_aln = ska.ska_aln
