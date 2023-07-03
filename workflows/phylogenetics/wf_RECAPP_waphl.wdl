@@ -113,7 +113,7 @@ call summarize.zip_files as zip_files  {
     
 }
 if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
-call versioning.waphl_version_capture as version {
+call versioning.waphl_version_capture as matrix_version {
   input:
     input_1 = ska.ska_docker_image,
     input_2 = gubbins_init.gubbins_docker_image,
@@ -130,7 +130,7 @@ call versioning.waphl_version_capture as version {
   }
   }
   if ( ksnp4.ksnp4_core_snp_matrix_status != "The core SNP matrix was produced"){
-call versioning.waphl_version_capture as version {
+call versioning.waphl_version_capture as no_matrix_version {
   input:
     input_1 = ska.ska_docker_image,
     input_2 = gubbins_init.gubbins_docker_image,
@@ -179,7 +179,7 @@ call versioning.waphl_version_capture as version {
     Array[String?]? clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
     Array[String?]? clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
     Array[File?]? plot_roary = clade_analysis.plot_roary
-    File tool_versions = version.input_file
+    File tool_versions = select_first(matrix_version.tool_versions, no_matrix_version.tool_versions)
     File zipped_output = zip_files.zipped_output
 
     String? pipeline_note = pipeline_note.pipeline_note
