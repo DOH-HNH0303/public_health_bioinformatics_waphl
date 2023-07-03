@@ -173,7 +173,7 @@ call versioning.waphl_version_capture as no_matrix_version {
     Array[File?]? clade_core_snp_matrix = select_all(clade_analysis.clade_core_snp_matrix)
     Array[File?]? clade_pan_snp_matrix = select_all(clade_analysis.clade_pan_snp_matrix)
     # iqtree outputs
-    Array[String]? clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
+    Array[String?] clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
     Array[File?]? clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
     Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
     Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
