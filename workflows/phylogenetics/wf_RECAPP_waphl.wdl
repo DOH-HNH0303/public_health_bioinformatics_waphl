@@ -156,7 +156,7 @@ call versioning.waphl_version_capture as no_matrix_version {
 
     File? tree = total_iqtree.ml_tree
 
-    File clade_list_file = split_by_clade.clade_list_file
+    File? clade_list_file = split_by_clade.clade_list_file
 
     Array[File] gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
     Array[File?] gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
