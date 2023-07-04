@@ -60,7 +60,7 @@ call ksnp.ksnp4_workflow as ksnp4  {
     samplename = samplename,
     cluster_name = cluster_name
 }
-if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
+
   call iqtree.iqtree as total_iqtree {
     input:
       alignment = ksnp4.ksnp4_core_matrix,
@@ -91,7 +91,7 @@ call clade_analysis.clade_analysis as clade_analysis  {
     samplename = scatter_by_clade.samplename
 }
 }
-}
+
 if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
   call utilities.run_note as pipeline_note  {
   input:
