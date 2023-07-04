@@ -160,7 +160,7 @@ call versioning.waphl_version_capture as no_matrix_version {
 
     ###Array[File?]? gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
     ###Array[File?]? gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
-    Array[File?]? gubbins_clade_recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff)
+    #Array[File?]? gubbins_clade_recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff)
 
     ###Array[File] pirate_pangenome_summary = select_all(clade_analysis.pirate_pangenome_summary)
     ### Array[File] pirate_gene_families_ordered = select_all(clade_analysis.pirate_gene_families_ordered)
@@ -174,8 +174,8 @@ call versioning.waphl_version_capture as no_matrix_version {
     ###Array[File?]? clade_pan_snp_matrix = select_all(clade_analysis.clade_pan_snp_matrix)
     # iqtree outputs
     Array[String?] clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
-    Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
-    Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
+    #Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
+    #Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
     #Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
     #Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
 
