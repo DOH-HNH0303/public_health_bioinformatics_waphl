@@ -104,7 +104,7 @@ call summarize.zip_files as zip_files  {
     clade_trees = select_all(clade_analysis.clade_iqtree_pan_tree),
     recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff),
     pirate_aln_gff = clade_analysis.pirate_aln_pan,
-    pirate_gene_presence_absence = select_all(clade_analysis.pirate_presence_absence_csv),
+    pirate_presence_absence_csv = select_all(clade_analysis.pirate_presence_absence_csv),
     cluster_name = cluster_name,
     cluster_tree = total_iqtree.ml_tree
     #terra_table = terra_table,
