@@ -181,7 +181,7 @@ call versioning.waphl_version_capture as no_matrix_version {
 
     Array[File?]? plot_roary = clade_analysis.plot_roary
     File tool_versions = select_first([matrix_version.tool_versions, no_matrix_version.tool_versions])
-    File zipped_output = zip_files.zipped_output
+    #File zipped_output = zip_files.zipped_output
 
     String? pipeline_note = pipeline_note.pipeline_note
   }
