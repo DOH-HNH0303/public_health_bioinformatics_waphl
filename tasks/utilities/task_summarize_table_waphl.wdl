@@ -58,7 +58,7 @@ task zip_files {
     ls
     mkdir ~{cluster_name}
     #mv ~{sep=' ' clade_trees} ~{cluster_name}
-    mv ~{sep=' ' recomb_gff} ~{cluster_name}
+    #mv ~{sep=' ' recomb_gff} ~{cluster_name}
     #mv ~{sep=' ' pirate_aln_gff} ~{cluster_name}
     #mv ~{sep=' ' pirate_presence_absence_csv} ~{cluster_name}
     mv ~{cluster_tree} ~{cluster_name}
