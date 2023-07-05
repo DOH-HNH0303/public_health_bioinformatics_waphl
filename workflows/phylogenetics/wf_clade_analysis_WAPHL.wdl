@@ -131,7 +131,7 @@ if (pan == true) {
   if (summarize == true) {
   call summarize.zip_files as zip_files  {
   input:
-    #recomb_gff = select_all([gubbins_clade.recomb_gff]),
+    recomb_gff = select_all([gubbins_clade.recomb_gff]),
     pirate_aln_gff = select_all([pirate.pirate_pangenome_alignment_gff]),
     #pirate_presence_absence_csv = select_all([pirate.pirate_presence_absence_csv]),
     cluster_name = cluster_name
