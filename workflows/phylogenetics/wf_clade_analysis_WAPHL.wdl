@@ -132,8 +132,8 @@ if (pan == true) {
   call summarize.zip_files as zip_files  {
   input:
     #recomb_gff = select_all([gubbins_clade.recomb_gff]),
-    #pirate_aln_gff = select_all([pirate.pirate_pangenome_alignment_gff]),
-    #pirate_presence_absence_csv = select_all([pirate.pirate_presence_absence_csv]),
+    pirate_aln_gff = select_all([pirate.pirate_pangenome_alignment_gff]),
+    pirate_presence_absence_csv = select_all([pirate.pirate_presence_absence_csv]),
     cluster_name = cluster_name
     #cluster_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree, generate_none.none_file]),
     #terra_table = terra_table,
