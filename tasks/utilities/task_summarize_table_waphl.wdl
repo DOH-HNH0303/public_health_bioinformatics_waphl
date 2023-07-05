@@ -47,7 +47,7 @@ task zip_files {
   input {
     #Array[File?]? clade_trees
     #Array[File?] recomb_gff
-    Array[File?] pirate_aln_gff   
+    Array[File] pirate_aln_gff   
     #Array[File?]? pirate_presence_absence_csv
     String cluster_name
     String? cluster_tree
