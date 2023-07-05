@@ -70,7 +70,7 @@ call ksnp.ksnp4_workflow as ksnp4  {
 
 call utilities.split_by_clade as split_by_clade  {
   input:
-    snp_matrix = ksnp4.ksnp4_core_snp_matrix,
+    snp_matrix = ksnp4.ksnp4_core_snp_matrix_og,
     cluster_name = cluster_name,
     snp_clade = snp_clade
 }

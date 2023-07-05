@@ -78,6 +78,8 @@ workflow ksnp4_workflow {
     File? ksnp4_pan_matrix = ksnp4_task.ksnp4_pan_matrix
 
     # ordered matrixes and reordered trees
+    File? ksnp4_core_snp_matrix_og = core_snp_dists.snp_matrix
+    File? ksnp4_pan_snp_matrix_og = pan_snp_dists.snp_matrix
     File? ksnp4_core_snp_matrix = core_reorder_matrix.ordered_matrix
     File? ksnp4_core_tree = core_reorder_matrix.tree
     File? ksnp4_pan_snp_matrix = pan_reorder_matrix.ordered_matrix
