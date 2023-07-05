@@ -45,7 +45,7 @@ task summarize_string_data {
 
 task zip_files {
   input {
-    Array[File]? clade_trees
+    Array[File?]? clade_trees
     Array[File?] recomb_gff
     Array[File?]? pirate_aln_gff
     Array[File?]? pirate_presence_absence_csv
