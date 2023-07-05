@@ -48,7 +48,7 @@ task zip_files {
     Array[File]? clade_trees
     Array[File] recomb_gff
     Array[File] pirate_aln_gff   
-    #Array[File?]? pirate_presence_absence_csv
+    Array[File] pirate_presence_absence_csv
     String cluster_name
     String? cluster_tree
     Int disk_size = 100
@@ -59,8 +59,9 @@ task zip_files {
     mkdir ~{cluster_name}
     mv ~{sep=' ' pirate_aln_gff} ~{cluster_name}
     mv ~{sep=' ' recomb_gff} ~{cluster_name}
-    
+    mv ~{sep=' ' clade_trees} ~{cluster_name}
     mv ~{cluster_tree} ~{cluster_name}
+    mv ~{sep=' ' pirate_presence_absence_csv} ~{cluster_name}
 
     cd ~{cluster_name}
     tar -cvzf ~{cluster_name}-archive.tar.gz *
