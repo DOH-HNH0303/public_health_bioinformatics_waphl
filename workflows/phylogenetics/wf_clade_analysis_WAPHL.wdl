@@ -135,7 +135,7 @@ if (pan == true) {
     pirate_aln_gff = select_all([pirate.pirate_pangenome_alignment_gff]),
     pirate_presence_absence_csv = select_all([pirate.pirate_presence_absence_csv]),
     cluster_name = cluster_name,
-    cluster_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree]),
+    cluster_tree = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree, generate_none.none_file]),
     #terra_table = terra_table,
     #terra_workspace = terra_workspace,
     #terra_project = terra_project,
@@ -148,7 +148,7 @@ if (pan == true) {
     pirate_aln_gff = pirate.pirate_pangenome_alignment_gff,
     pirate_presence_absence_csv = pirate.pirate_presence_absence_csv,
     cluster_name = cluster_name,
-    treefile = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree])
+    treefile = select_first([masked_pan_iqtree.ml_tree, unmasked_pan_iqtree.ml_tree, masked_core_iqtree.ml_tree, unmasked_core_iqtree.ml_tree, generate_none.none_file])
     #terra_table = terra_table,
     #terra_workspace = terra_workspace,
     #terra_project = terra_project,
@@ -158,10 +158,10 @@ if (pan == true) {
     input:
       input_1 = pirate.pirate_docker_image,
       input_2 = gubbins_clade.gubbins_docker_image,
-      input_3 = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string]),
+      input_3 = select_first([core_mask_gubbins_clade.maskrc_docker_image, pan_mask_gubbins_clade.maskrc_docker_image, generate_none.none_string, generate_none.none_string]),
       input_4 = ksnp4_clade_core.ksnp4_docker_image,
-      input_5 = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version]),
-      input_6 = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version]),
+      input_5 = select_first([masked_pan_iqtree.version, unmasked_pan_iqtree.version, masked_core_iqtree.version, unmasked_core_iqtree.version, generate_none.none_string]),
+      input_6 = select_first([pan_snp_dists.snp_dists_version, core_snp_dists.snp_dists_version, generate_none.none_string]),
       input_7 = plot_roary.plot_roary_docker_image
     }
   }
