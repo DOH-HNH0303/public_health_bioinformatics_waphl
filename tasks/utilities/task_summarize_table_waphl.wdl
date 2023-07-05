@@ -45,7 +45,7 @@ task summarize_string_data {
 
 task zip_files {
   input {
-    Array[File?]? clade_trees
+    #Array[File?]? clade_trees
     #Array[File?] recomb_gff
     Array[File?]? pirate_aln_gff   
     Array[File?]? pirate_presence_absence_csv
@@ -58,7 +58,7 @@ task zip_files {
     ls
     mkdir ~{cluster_name}
     mv ~{sep=' ' pirate_aln_gff} ~{cluster_name}
-    mv ~{sep=' ' clade_trees} ~{cluster_name}
+    
     mv ~{sep=' ' pirate_presence_absence_csv} ~{cluster_name}
     mv ~{cluster_tree} ~{cluster_name}
 
