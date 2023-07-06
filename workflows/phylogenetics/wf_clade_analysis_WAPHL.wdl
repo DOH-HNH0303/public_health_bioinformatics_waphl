@@ -170,7 +170,7 @@ if (pan == true) {
 
     String gubbins_date = gubbins_clade.date
     String gubbins_clade_mask = gubbins_clade.gubbins_mask
-    String gubbins_clade_comment = gubbins_clade.gubbins_comment
+    String? gubbins_clade_comment = gubbins_clade.gubbins_comment
     File? gubbins_clade_polymorph_fasta = gubbins_clade.polymorph_site_fasta
     File? gubbins_clade_branch_stats = gubbins_clade.branch_stats
     File? gubbins_clade_recomb_gff = gubbins_clade.recomb_gff
