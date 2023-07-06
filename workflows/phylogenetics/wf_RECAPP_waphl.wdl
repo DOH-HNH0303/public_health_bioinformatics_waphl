@@ -165,7 +165,7 @@ call versioning.waphl_version_capture as no_matrix_version {
     ###Array[File] pirate_pangenome_summary = select_all(clade_analysis.pirate_pangenome_summary)
     ### Array[File] pirate_gene_families_ordered = select_all(clade_analysis.pirate_gene_families_ordered)
     Array[String?]? pirate_docker_image = select_all(clade_analysis.pirate_docker_image)
-    ###Array[File?]? pirate_gene_presence_absence = select_all(clade_analysis.pirate_presence_absence_csv)
+    Array[File?]? pirate_gene_presence_absence = select_all(clade_analysis.pirate_presence_absence_csv)
     Array[File?]? pirate_aln_pan = clade_analysis.pirate_aln_pan
     Array[File?]? pirate_aln_core = clade_analysis.pirate_aln_core
     # snp_dists outputs
