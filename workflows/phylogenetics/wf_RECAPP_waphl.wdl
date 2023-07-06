@@ -174,14 +174,14 @@ call versioning.waphl_version_capture as no_matrix_version {
     ###Array[File?]? clade_pan_snp_matrix = select_all(clade_analysis.clade_pan_snp_matrix)
     # iqtree outputs
     Array[String?] clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
-    #Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
-    #Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
-    #Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
-    #Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
+    Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
+    Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
+    Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
+    Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
 
     Array[File?]? plot_roary = clade_analysis.plot_roary
     File tool_versions = select_first([matrix_version.tool_versions, no_matrix_version.tool_versions])
-    #File zipped_output = zip_files.zipped_output
+    File zipped_output = zip_files.zipped_output
 
     String? pipeline_note = pipeline_note.pipeline_note
   }
