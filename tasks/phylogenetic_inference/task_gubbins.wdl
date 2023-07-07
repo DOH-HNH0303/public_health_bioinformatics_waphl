@@ -60,9 +60,9 @@ task gubbins {
   input {
     File alignment
     String cluster_name
-    #String docker = "sangerpathogens/gubbins:v3.0.0"
+    String docker = "sangerpathogens/gubbins:v3.0.0"
     #String docker = "quay.io/biocontainers/gubbins:3.3--py310pl5321h8472f5a_0"
-    String docker = "quay.io/biocontainers/gubbins:3.3.0--py310pl5321h8472f5a_0"
+    #String docker = "quay.io/biocontainers/gubbins:3.3.0--py310pl5321h8472f5a_0"
     String tree_builder = "raxml"
     String? tree_args
     String nuc_subst_model = "GTRGAMMA"
