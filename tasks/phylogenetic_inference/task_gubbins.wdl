@@ -106,6 +106,8 @@ task gubbins {
         echo "">GUBBINS_COMMENT
     fi
 
+    cat GUBBINS_BOOL
+    cat GUBBINS_COMMENT
     ls
 
   >>>
