@@ -8,8 +8,8 @@ task ksnp4 {
     Int kmer_size = 19
     String ksnp4_args = "" # add -ML to calculate a maximum likelihood tree or -NJ to calculate a neighbor-joining tree
     String docker_image = "staphb/ksnp4:4.0"
-    Int memory = 8
-    Int cpu = 4
+    Int memory = 16
+    Int cpu = 8
     Int disk_size = 100
 
   }
