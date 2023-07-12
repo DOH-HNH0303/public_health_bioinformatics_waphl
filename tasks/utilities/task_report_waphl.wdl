@@ -249,7 +249,7 @@ task plot_roary_waphl {
     File? recomb_gff
     File? pirate_aln_gff
     File? pirate_presence_absence_csv
-    String docker = "hnh0303/plot_roary_waphl:1.0"
+    String docker = "hnh0303/plot_roary_waphl:1.1"
     Int threads = 6
     String? stripped = basename(treefile, ".tree") 
   }
