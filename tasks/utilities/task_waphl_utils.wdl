@@ -75,6 +75,8 @@ task freyja_epi_output {
     String? samplecollectdate
     String? wwtpname
     String? submittersamplenumber
+    String? wwtp_county
+    String? wwtp_zip
     File freyja_demixed
     File freyja_depths
     Int memory = 4
@@ -104,6 +106,9 @@ task freyja_epi_output {
   print("sc_date", sc_date)
   location = "~{wwtpname}"
   submitter = "~{submittersamplenumber}"
+  county = "~{wwtp_county}"
+  zip = "~{wwtp_zip}"
+
   with open("~{freyja_demixed}") as f:
     lines = f.readlines()
     for line in lines:
@@ -159,14 +164,27 @@ task freyja_epi_output {
     missing_data = "Missing"
     date_list=[None] * len(abundances)
   freyja_date_list=[today]*len(abundances)
+
   submitter_list=[submitter]*len(abundances)
   if submitter == "":
     missing_data = "Missing"
     submitter_list=[None] * len(abundances)
+    
   location_list=[location]*len(abundances)
   if location == "":
     missing_data = "Missing"
     location_list=[None] * len(abundances)
+
+  county_list=[county]*len(abundances)
+  if county == "":
+    missing_data = "Missing"
+    county_list=[None] * len(abundances)
+
+  zip_list=[zip]*len(abundances)
+  if zip == "":
+    missing_data = "Missing"
+    zip_list=[None] * len(abundances)
+    
   epi = open("MISSING_EPI", "w")
   print(missing_data)
   if missing_data == "Missing":
@@ -175,7 +193,7 @@ task freyja_epi_output {
 
 
   df = pd.DataFrame({'PHL_ID':id_list, 'Sample_ID':submitter_list, 'Sample_Collection_date':date_list,
-  'Sample_Site':location_list, "lineages":lineages, "abundances":abundances, "freyja_date":freyja_date_list})
+  'Sample_Site':location_list, 'Sample_county':county_list, 'Sample_zip':zip_list, lineages":lineages, "abundances":abundances, "freyja_date":freyja_date_list})
   df.to_csv('~{samplename}_for_epi.tsv', sep="\t", header=False, index=False)
   CODE
 
