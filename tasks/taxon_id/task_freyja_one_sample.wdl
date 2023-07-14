@@ -8,12 +8,12 @@ task freyja_one_sample {
     File? freyja_usher_barcodes
     File? freyja_lineage_metadata
     Float? eps
-    Boolean update_db = false
+    Boolean update_db = true
     Boolean confirmed_only = false
     Boolean bootstrap = false
     Int? number_bootstraps
-    Int memory = 4
-    String docker = "quay.io/staphb/freyja:1.3.11"
+    Int memory = 12
+    String docker = "staphb/freyja:1.4.4"
     Int disk_size = 100
   }
   command <<<
@@ -26,6 +26,12 @@ task freyja_one_sample {
       if grep "FileNotFoundError.*lineagePaths.*" freyja_update.log
       then 
         echo "Error in attempting to update Freyja files. Try increasing memory"
+        >&2 echo "Killed"
+        exit 1
+      fi
+      if grep "error" freyja_update.log
+      then
+        grep "error" freyja_update.log | tail -1
         >&2 echo "Killed"
         exit 1
       fi
@@ -87,7 +93,7 @@ task freyja_one_sample {
   >>>
   runtime {
     memory: "~{memory} GB"
-    cpu: 2
+    cpu: 4
     docker: "~{docker}"
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
