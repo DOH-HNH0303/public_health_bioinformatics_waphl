@@ -5,7 +5,7 @@ import "../utilities/wf_read_QC_trim_pe.wdl" as read_qc
 import "../../tasks/alignment/task_bwa.wdl" as align
 import "../../tasks/assembly/task_ivar_primer_trim.wdl" as trim_primers
 import "../../tasks/task_versioning.wdl" as versioning
-import "../tasks/utilities/task_waphl_utils.wdl" as waphl_utils
+import "../../tasks/utilities/task_waphl_utils.wdl" as waphl_utils
 
 workflow freyja_fastq {
   input {
