@@ -155,6 +155,11 @@ workflows:
    primaryDescriptorPath: /workflows/freyja/wf_freyja_update.wdl
    testParameterFiles:
     - empty.json
+ - name: WW_for_Epi_PHB
+   subclass: WDL
+   primaryDescriptorPath: /workflows/freyja/wf_ww_for_epi_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
  - name: kSNP3_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp3.wdl
