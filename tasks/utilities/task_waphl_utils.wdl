@@ -184,7 +184,7 @@ task freyja_epi_output {
   if zip == "":
     missing_data = "Missing"
     zip_list=[None] * len(abundances)
-    
+
   epi = open("MISSING_EPI", "w")
   print(missing_data)
   if missing_data == "Missing":
@@ -193,7 +193,7 @@ task freyja_epi_output {
 
 
   df = pd.DataFrame({'PHL_ID':id_list, 'Sample_ID':submitter_list, 'Sample_Collection_date':date_list,
-  'Sample_Site':location_list, 'Sample_county':county_list, 'Sample_zip':zip_list, lineages":lineages, "abundances":abundances, "freyja_date":freyja_date_list})
+  'Sample_Site':location_list, 'Sample_county':county_list, 'Sample_zip':zip_list, "lineages":lineages, "abundances":abundances, "freyja_date":freyja_date_list})
   df.to_csv('~{samplename}_for_epi.tsv', sep="\t", header=False, index=False)
   CODE
 
