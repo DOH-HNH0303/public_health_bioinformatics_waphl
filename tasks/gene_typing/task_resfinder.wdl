@@ -78,6 +78,15 @@ task resfinder {
     mv ResFinder_Hit_in_genome_seq.fsa ~{samplename}_ResFinder_Hit_in_genome_seq.fsa
     mv ResFinder_Resistance_gene_seq.fsa ~{samplename}_ResFinder_Resistance_gene_seq.fsa
     mv ResFinder_results_tab.txt ~{samplename}_ResFinder_results_tab.txt
+
+    amr_genes=$(awk -F '\t' '{ print $1 }' ~{samplename}_ResFinder_results_tab.txt | tail -n+2 | tr '\n' ',' | sed 's/.$//')
+    if [ -z "${amr_genes}" ]; then
+       abricate_genes="No amr genes detected by resfinder"
+    fi
+
+    # create final output strings
+    echo "${amr_genes}" > AMR_GENES
+
     if [ -f PointFinder_prediction.txt ]; then
       mv PointFinder_prediction.txt ~{samplename}_PointFinder_prediction.txt
       mv PointFinder_results.txt ~{samplename}_PointFinder_results.txt
@@ -92,6 +101,7 @@ task resfinder {
     File resfinder_results_tab = "~{samplename}_ResFinder_results_tab.txt"
     File? pointfinder_pheno_table = "~{samplename}_PointFinder_prediction.txt"
     File? pointfinder_results = "~{samplename}_PointFinder_results.txt"
+    String resfinder_amr_genes = read_string("AMR_GENES")
     String resfinder_docker = "~{docker}"
     String resfinder_version = read_string("RESFINDER_VERSION")
     String resfinder_db_version = read_string("RESFINDER_DB_VERSION")
