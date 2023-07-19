@@ -7,7 +7,7 @@ task fastq_scan_pe {
     String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
     String read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
     Int disk_size = 100
-    Int memory = 8
+    Int memory = 12
   }
   command <<<
     # capture date and version
@@ -48,7 +48,7 @@ task fastq_scan_pe {
   runtime {
     docker: "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
     memory: memory  +" GB"
-    cpu: 2
+    cpu: 4
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
