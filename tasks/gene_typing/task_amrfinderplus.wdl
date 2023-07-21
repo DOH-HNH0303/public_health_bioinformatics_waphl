@@ -19,6 +19,7 @@ task amrfinderplus_nuc {
   command <<<
     # logging info
     date | tee DATE
+    amrfinder_update --database db/amrfinderplus-db
     amrfinder --version | tee AMRFINDER_VERSION
     
     # capture the database version; strip out unnecessary output, remove "Database version: " that prints in front of the actual database version
