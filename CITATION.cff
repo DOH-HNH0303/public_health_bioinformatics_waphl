@@ -37,6 +37,6 @@ authors:
 - family-names: "Sevinsky"
   given-names: "Joel"
   orcid: "https://orcid.org/0000-0003-0512-2827"
-title: "Public Health Bioinformatics: Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of pathogens of public health concern."
-url: "https://github.com/theiagen/public_health_bioinformatics"
+title: "Public Health Bioinformatics: Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of pathogens of public health concern. WAPHL Fork"
+url: "https://github.com/DOH-HNH0303/public_health_bioinformatics_waphl"
 version: 0.0.1
