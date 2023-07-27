@@ -1,6 +1,9 @@
 cff-version: 1.2.0
-message: "If you use PHB workflows, please cite it as below."
+message: "If you use PHB workflows from the WAPHL respository fork, please cite it as below."
 authors:
+- family-names: "Halstead"
+  given-names: "Holly N"
+  orcid: "https://orcid.org/0009-0006-3546-0340"
 - family-names: "Libuit"
   given-names: "Kevin G"
   orcid: "https://orcid.org/0000-0002-0894-1820"
