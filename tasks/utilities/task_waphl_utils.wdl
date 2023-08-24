@@ -95,6 +95,7 @@ task freyja_epi_output {
   import csv
   import fileinput
   import pandas as pd
+  import numpy as np
   from datetime import date
 
 
@@ -194,6 +195,7 @@ task freyja_epi_output {
 
   df = pd.DataFrame({'PHL_ID':id_list, 'Sample_ID':submitter_list, 'Sample_Collection_date':date_list,
   'Sample_Site':location_list, 'Sample_county':county_list, 'Sample_zip':zip_list, "lineages":lineages, "abundances":abundances, "freyja_date":freyja_date_list})
+  df.replace(np.nan, 'NULL', regex=True)
   df.to_csv('~{samplename}_for_epi.tsv', sep="\t", header=False, index=False)
   CODE
 
