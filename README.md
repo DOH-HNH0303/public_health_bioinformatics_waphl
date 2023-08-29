@@ -1,7 +1,7 @@
 # Public Health Bioinformatics (PHB) - WAPHL
 Bioinformatics workflows for characterization, epidemiology and sharing of pathogen genomes. This is the Washington State Department of Health Public Health Lab fork of the Public Health Bioinformatics repository created by Theiagen.
 
-**More information about the steps undertaken in these workflows is available on the Wiki for this repository for all pipelines not containing WAPHL in the workflow filename or via the [Theiagen Public Resources Documentation](https://theiagen.notion.site/Theiagen-Public-Health-Resources-a4bd134b0c5c4fe39870e21029a30566) for all other pipelines.**
+**More information about the steps undertaken in these workflows is available on the [Wiki](https://github.com/DOH-HNH0303/public_health_bioinformatics_waphl/wiki) for this repository for all pipelines not containing WAPHL in the workflow filename or via the [Theiagen Public Resources Documentation](https://theiagen.notion.site/Theiagen-Public-Health-Resources-a4bd134b0c5c4fe39870e21029a30566) for all other pipelines.**
 
 Support for running these workflows can be sought by raising a [GitHub issue](https://github.com/theiagen/public_health_bioinformatics/issues/new) or by contacting Theiagen at support@theiagen.com. For workflows ending with WAPHL please contact [Holly Halstead](mailto:holly.halstead@doh.wa.gov).
 
