@@ -86,7 +86,7 @@ if(defined(declared_cluster)) {
     samplename = samplename
 }
 }
-scatter (pair in zip(select_first([clade_list_file.clade_list, split_by_clade.clade_list]), range(length(select_first([clade_list_file.clade_list, split_by_clade.clade_list]))))) {
+scatter (pair in zip(select_first([clade_list_file.clade_list, split_by_clade.clade_list, samplename]), range(length(select_first([clade_list_file.clade_list, split_by_clade.clade_list, samplename]))))) {
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
