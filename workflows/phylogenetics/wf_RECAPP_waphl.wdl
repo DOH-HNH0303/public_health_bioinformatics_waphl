@@ -132,7 +132,7 @@ call versioning.waphl_version_capture as matrix_version {
     input_4 = ksnp4.ksnp4_docker,
     input_5 = total_iqtree.version,
     input_6 = ksnp4.ksnp4_snp_dists_version,
-    input_7 = select_first([clade_list_file.clade_list_file, split_by_clade.split_clade_docker_image]),
+    input_7 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
     input_8 = select_first(scatter_by_clade.scatter_clade_docker_image),
     input_9 = select_first(clade_analysis.pirate_docker_image),
     input_11 = select_first(clade_analysis.maskrc_docker_image),
