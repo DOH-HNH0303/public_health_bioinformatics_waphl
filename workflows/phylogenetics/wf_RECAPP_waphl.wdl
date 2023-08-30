@@ -69,7 +69,7 @@ call ksnp.ksnp4_workflow as ksnp4  {
       iqtree_model = iqtree_model
   }
 
-if(defined(snp_clade)) {}
+if(defined(snp_clade)) {
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix_og,
