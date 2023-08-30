@@ -147,7 +147,7 @@ task split_by_clade {
     String cluster_name
     String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
     Int threads = 6
-    Int snp_clade
+    Int? snp_clade
   }
   command <<<
     # date and version control
@@ -157,7 +157,7 @@ task split_by_clade {
     import pandas as pd
 
     '''Takes snp_distance_matrix.tsv as input and returns txt file with list
-    of '''
+    of seqs in each cluster'''
     input = "~{snp_matrix}"
     output = "~{cluster_name}_output.txt"
     #cluster_dist = 150 #SNP ingdistance determines cluster
@@ -208,6 +208,64 @@ task split_by_clade {
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
+  }
+}
+
+task split_by_declared_cluster {
+  input {
+    Array[String]? declared_cluster
+    String cluster_name
+    Array[String] samplename
+    String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
+  }
+  command <<<
+    # date and version control
+    date | tee DATE
+    python3<<CODE
+
+    import pandas as pd
+
+    '''List of categorical declarations for each sequence as input and returns txt file with list
+    of seqs in each cluster based on that input'''
+    cluster_list = "~{sep=' ' declared_cluster}".split(" ")
+    seqs = "~{sep=' ' samplename}".split(" ")
+    out = "~{cluster_name}_output.txt"
+
+
+    clust_dict = {}
+    for i in range(len(seqs)):
+        if not cluster_list[i]:
+            cluster_list[i] = "not_detected"
+        if cluster_list[i] in clust_dict.keys():
+            clust_dict[cluster_list[i]].append(seqs[i])
+        else:
+            clust_dict[cluster_list[i]] = [seqs[i]]	
+
+    seq_list =[]
+    for i in clust_dict.keys():
+        seq_list.append(clust_dict[i])     
+
+    with open(out, 'w') as fp:
+        for li in seq_list:
+            for item in li:
+                fp.write("%s\t" % item)
+            fp.write("\n")
+        print('Done')
+
+    CODE
+  >>>
+  output {
+    String date = read_string("DATE")
+    File clade_list_file = "~{cluster_name}_output.txt"
+    Array[Array[String]] clade_list = read_tsv("~{cluster_name}_output.txt")
+    String split_cluster_docker_image = docker
+  }
+  runtime {
+    docker: docker
+    memory: "16 GB"
+    cpu: 4
+    disks: "local-disk 100 SSD"
+    preemptible: 0
   }
 }
 

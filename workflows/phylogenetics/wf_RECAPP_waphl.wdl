@@ -17,11 +17,12 @@ workflow recomb_aware_phylo_analysis {
     Array[String] samplename
     File reference_genome
     String cluster_name
+    Array[String]? declared_cluster
     # String terra_workspace
     #String terra_project
     # String terra_table
     String iqtree_model = "MFP"
-    Int snp_clade = 150
+    Int? snp_clade # = 150
     Float filter_perc = 35.0
   }
   call ska.ska as ska {
@@ -68,14 +69,24 @@ call ksnp.ksnp4_workflow as ksnp4  {
       iqtree_model = iqtree_model
   }
 
+if(defined(snp_clade)) {}
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix_og,
     cluster_name = cluster_name,
     snp_clade = snp_clade
 }
+}
 
-scatter (pair in zip(split_by_clade.clade_list, range(length(split_by_clade.clade_list)))) {
+if(defined(declared_cluster)) {
+  call utilities.split_by_declared_cluster as split_by_declared_cluster  {
+  input:
+    declared_cluster = declared_cluster,
+    cluster_name = cluster_name,
+    samplename = samplename
+}
+}
+scatter (pair in zip(select_first([clade_list_file.clade_list, split_by_clade.clade_list]), range(length(select_first([clade_list_file.clade_list, split_by_clade.clade_list]))))) {
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
@@ -121,7 +132,7 @@ call versioning.waphl_version_capture as matrix_version {
     input_4 = ksnp4.ksnp4_docker,
     input_5 = total_iqtree.version,
     input_6 = ksnp4.ksnp4_snp_dists_version,
-    input_7 = split_by_clade.split_clade_docker_image,
+    input_7 = select_first([clade_list_file.clade_list_file, split_by_clade.split_clade_docker_image]),
     input_8 = select_first(scatter_by_clade.scatter_clade_docker_image),
     input_9 = select_first(clade_analysis.pirate_docker_image),
     input_11 = select_first(clade_analysis.maskrc_docker_image),
@@ -156,7 +167,7 @@ call versioning.waphl_version_capture as no_matrix_version {
 
     File? tree = total_iqtree.ml_tree
 
-    File? clade_list_file = split_by_clade.clade_list_file
+    File? clade_list_file = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.clade_list_file])
 
     ###Array[File?]? gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
     ###Array[File?]? gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
