@@ -353,7 +353,7 @@ task scatter_by_clade {
 
 task choose_clade_filter {
   input {
-    Array[String] clade_list
+    Array[String] cladelist
   }
   command <<<
     # Data sorting step go to get around terra issue
@@ -369,7 +369,7 @@ task choose_clade_filter {
   >>>
   output {
     String date = read_string("DATE")
-    Array[String] clade_list = clade_list
+    Array[String] clade_list = cladelist
     String choose_clade_docker_image = docker
   }
   runtime {
