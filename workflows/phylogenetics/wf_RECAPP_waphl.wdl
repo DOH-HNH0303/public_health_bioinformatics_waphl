@@ -128,7 +128,7 @@ call summarize.zip_files as zip_files  {
     #terra_project = terra_project,
     
 }
-if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced" || !only_clade_analysis){
+if ( select_first([!only_clade_analysis, ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"])){
 call versioning.waphl_version_capture as matrix_version {
   input:
     input_1 = ska.ska_docker_image,
