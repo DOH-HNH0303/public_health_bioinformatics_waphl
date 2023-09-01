@@ -157,9 +157,9 @@ call versioning.waphl_version_capture as no_matrix_version {
   }
   }
   output {
-    File ska_aln = ska.ska_aln
-    String gubbins_date = gubbins_init.date
-    String ska_docker = ska.ska_docker_image
+    File? ska_aln = ska.ska_aln
+    String? gubbins_date = gubbins_init.date
+    String? ska_docker = ska.ska_docker_image
 
     File? gubbins_polymorph_site_fasta = gubbins_init.polymorph_site_fasta
     File? gubbins_polymorph_site_phylip = gubbins_init.polymorph_site_phylip
