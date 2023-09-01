@@ -63,13 +63,16 @@ task ksnp4 {
 
   if [ -s ksnp4/~{cluster_name}_core_SNPs_matrix.fasta ]; then # is the file not-empty?
     echo "The core SNP matrix was produced" | tee SKIP_SNP_DIST # then do NOT skip
+    echo "true" | tee KSNP_BOOL
   else
+    echo "true" | tee KSNP_BOOL
      # otherwise, skip
     cat ~{cluster_name}_core_SNPs_matrix.fasta
     if grep -Fxq "Number core SNPs: 0" ksnp4/COUNT_coreSNPs; then 
       echo "Number core SNPs: 0" | tee SKIP_SNP_DIST
     else
       echo "The core SNP matrix could not be produced" | tee SKIP_SNP_DIST
+      echo "false" | tee KSNP_BOOL
     fi
   fi
 
@@ -107,6 +110,7 @@ task ksnp4 {
   >>>
   output {
     File ksnp4_core_matrix = "ksnp4/${cluster_name}_core_SNPs_matrix.fasta"
+    Boolean ksnp_bool = read_boolean("KSNP_BOOL")
     File ksnp4_core_tree = "ksnp4/${cluster_name}_core.nwk"
     File? ksnp4_vcf = "ksnp4/${cluster_name}.vcf"
     File ksnp4_pan_matrix = "ksnp4/~{cluster_name}_pan_SNPs_matrix.fasta"
