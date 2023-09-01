@@ -128,7 +128,7 @@ call summarize.zip_files as zip_files  {
     #terra_project = terra_project,
     
 }
-if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
+if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced" || !ksnp4.ksnp4_core_snp_matrix_status){
 call versioning.waphl_version_capture as matrix_version {
   input:
     input_1 = ska.ska_docker_image,
@@ -145,7 +145,7 @@ call versioning.waphl_version_capture as matrix_version {
     input_14 = select_first(clade_analysis.snp_dist_version)
   }
   }
-  if ( ksnp4.ksnp4_core_snp_matrix_status != "The core SNP matrix was produced"){
+if (ksnp4.ksnp4_core_snp_matrix_status != "The core SNP matrix was produced"){
 call versioning.waphl_version_capture as no_matrix_version {
   input:
     input_1 = ska.ska_docker_image,
