@@ -18,6 +18,7 @@ workflow recomb_aware_phylo_analysis {
     File reference_genome
     String cluster_name
     Array[String]? declared_cluster
+    Boolean only_clade_analysis = false
     # String terra_workspace
     #String terra_project
     # String terra_table
@@ -25,6 +26,8 @@ workflow recomb_aware_phylo_analysis {
     Int? snp_clade # = 150
     Float filter_perc = 35.0
   }
+
+
   call ska.ska as ska {
     input:
       assembly_fasta = assembly_fasta,
@@ -69,7 +72,7 @@ call ksnp.ksnp4_workflow as ksnp4  {
       iqtree_model = iqtree_model
   }
 
-if(defined(snp_clade)) {
+if (defined(snp_clade)) {
 call utilities.split_by_clade as split_by_clade  {
   input:
     snp_matrix = ksnp4.ksnp4_core_snp_matrix_og,
@@ -78,7 +81,7 @@ call utilities.split_by_clade as split_by_clade  {
 }
 }
 
-if(defined(declared_cluster)) {
+if (defined(declared_cluster)) {
   call utilities.split_by_declared_cluster as split_by_declared_cluster  {
   input:
     declared_cluster = declared_cluster,
