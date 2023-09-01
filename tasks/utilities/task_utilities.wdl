@@ -369,7 +369,7 @@ task choose_clade_filter {
   >>>
   output {
     String date = read_string("DATE")
-    Array[String] = clade_list
+    Array[String] clade_list = clade_list
     String choose_clade_docker_image = docker
   }
   runtime {
