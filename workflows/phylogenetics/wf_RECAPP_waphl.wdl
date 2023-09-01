@@ -159,7 +159,7 @@ call versioning.waphl_version_capture as no_matrix_version {
   }
   }
   if ( only_clade_analysis) {
-  call versioning.waphl_version_capture as matrix_version {
+  call versioning.waphl_version_capture as skipped_matrix_version {
   input:
     input_1 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
     input_2 = select_first(scatter_by_clade.scatter_clade_docker_image),
@@ -210,7 +210,7 @@ call versioning.waphl_version_capture as no_matrix_version {
     Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
 
     Array[File?]? plot_roary = clade_analysis.plot_roary
-    File tool_versions = select_first([matrix_version.tool_versions, no_matrix_version.tool_versions])
+    File tool_versions = select_first([skipped_matrix_version.tool_versions, matrix_version.tool_versions, no_matrix_version.tool_versions])
     File zipped_output = zip_files.zipped_output
 
     String? pipeline_note = pipeline_note.pipeline_note
