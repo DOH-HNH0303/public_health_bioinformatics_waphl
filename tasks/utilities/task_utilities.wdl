@@ -354,6 +354,7 @@ task scatter_by_clade {
 task choose_clade_filter {
   input {
     Array[String] cladelist
+    String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
   }
   command <<<
     # Data sorting step go to get around terra issue
