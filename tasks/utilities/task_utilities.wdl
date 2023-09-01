@@ -351,6 +351,37 @@ task scatter_by_clade {
   }
 }
 
+task choose_clade_filter {
+  input {
+    Array[String] clade_list
+  }
+  command <<<
+    # Data sorting step go to get around terra issue
+
+
+    date | tee DATE
+    mkdir files_dir
+    for x in ~{sep=' ' clade_list}
+    do
+        echo "${x}" 
+    done;
+    
+  >>>
+  output {
+    String date = read_string("DATE")
+    Array[String] clade_list
+    String choose_clade_docker_image = docker
+  }
+  runtime {
+    docker: docker
+    memory: "16 GB"
+    cpu: 4
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
+  }
+}
+
 task generate_none {
   input {
     String docker = "quay.io/broadinstitute/py3-bio:0.1.2"

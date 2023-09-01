@@ -27,7 +27,7 @@ workflow recomb_aware_phylo_analysis {
     Float filter_perc = 35.0
   }
 
-
+if (!only_clade_analysis){
   call ska.ska as ska {
     input:
       assembly_fasta = assembly_fasta,
@@ -80,6 +80,7 @@ call utilities.split_by_clade as split_by_clade  {
     snp_clade = snp_clade
 }
 }
+}
 
 if (defined(declared_cluster)) {
   call utilities.split_by_declared_cluster as split_by_declared_cluster  {
@@ -89,7 +90,8 @@ if (defined(declared_cluster)) {
     samplename = samplename
 }
 }
-scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list, samplename]), range(length(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list, samplename]))))) {
+
+scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]), range(length(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]))))) {
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
