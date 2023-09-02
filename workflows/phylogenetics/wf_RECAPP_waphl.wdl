@@ -95,7 +95,7 @@ if (defined(declared_cluster)) {
 }
 
 scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]), range(length(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]))))) {
-if (pair.left >= 3){
+if (length(pair.left >= 3)){
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
