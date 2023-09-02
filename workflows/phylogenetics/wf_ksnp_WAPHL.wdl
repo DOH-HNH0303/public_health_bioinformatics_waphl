@@ -76,7 +76,7 @@ workflow ksnp4_workflow {
     # ksnp4 fasta matrices
     File? ksnp4_core_matrix = ksnp4_task.ksnp4_core_matrix
     File? ksnp4_pan_matrix = ksnp4_task.ksnp4_pan_matrix
-    Boolean ksnp4_bool = ksnp4_task.bool
+    Boolean ksnp4_bool = ksnp4_task.ksnp_bool
 
     # ordered matrixes and reordered trees
     File? ksnp4_core_snp_matrix_og = core_snp_dists.snp_matrix
