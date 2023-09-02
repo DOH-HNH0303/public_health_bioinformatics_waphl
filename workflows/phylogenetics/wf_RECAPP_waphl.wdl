@@ -25,6 +25,9 @@ workflow recomb_aware_phylo_analysis {
     String iqtree_model = "MFP"
     Int? snp_clade # = 150
     Float filter_perc = 35.0
+
+    # Don't touch default values below this line
+    Boolean ksnp4_bool = false
   }
 
 if (!only_clade_analysis){
@@ -128,7 +131,7 @@ call summarize.zip_files as zip_files  {
     #terra_project = terra_project,
     
 }
-if ( !only_clade_analysis) {
+if ( defined(ksnp4.ksnp4_bool)) {
 if ( ksnp4.ksnp4_bool){
 call versioning.waphl_version_capture as matrix_version {
   input:
