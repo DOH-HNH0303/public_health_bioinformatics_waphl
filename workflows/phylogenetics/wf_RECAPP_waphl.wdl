@@ -131,8 +131,8 @@ call summarize.zip_files as zip_files  {
     #terra_project = terra_project,
     
 }
-if ( defined(ksnp4.ksnp4_bool)) {
-if ( ksnp4.ksnp4_bool){
+if ( defined(ksnp4.ksnp4_core_snp_matrix_status)) {
+if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
 call versioning.waphl_version_capture as matrix_version {
   input:
     input_1 = ska.ska_docker_image,
@@ -149,7 +149,7 @@ call versioning.waphl_version_capture as matrix_version {
     input_14 = select_first(clade_analysis.snp_dist_version)
   }
   }
-if (!ksnp4.ksnp4_bool){
+if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix could not be produced"){
 call versioning.waphl_version_capture as no_matrix_version {
   input:
     input_1 = ska.ska_docker_image,
@@ -161,7 +161,7 @@ call versioning.waphl_version_capture as no_matrix_version {
   }
   }
   }
-  if ( only_clade_analysis) {
+  if ( !only_clade_analysis) {
   call versioning.waphl_version_capture as skipped_matrix_version {
   input:
     input_1 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
