@@ -111,12 +111,7 @@ call clade_analysis.clade_analysis as clade_analysis  {
 }
 }
 
-if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
-  call utilities.run_note as pipeline_note  {
-  input:
-    note = "Number core SNPs: 0, no trees could be produced."
-}
-}
+
 
 call summarize.zip_files as zip_files  {
   input:
@@ -132,6 +127,12 @@ call summarize.zip_files as zip_files  {
     
 }
 if ( defined(ksnp4.ksnp4_core_snp_matrix_status)) {
+if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
+  call utilities.run_note as pipeline_note  {
+  input:
+    note = "Number core SNPs: 0, no trees could be produced."
+}
+}
 if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
 call versioning.waphl_version_capture as matrix_version {
   input:
