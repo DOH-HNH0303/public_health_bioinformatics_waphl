@@ -162,7 +162,7 @@ call versioning.waphl_version_capture as no_matrix_version {
   }
   }
   }
-  if ( !only_clade_analysis) {
+  if ( only_clade_analysis) {
   call versioning.waphl_version_capture as skipped_matrix_version {
   input:
     input_1 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
