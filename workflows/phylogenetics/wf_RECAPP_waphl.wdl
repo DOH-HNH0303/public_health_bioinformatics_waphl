@@ -115,19 +115,19 @@ call clade_analysis.clade_analysis as clade_analysis  {
 
 
 
-call summarize.zip_files as zip_files  {
-  input:
-    clade_trees = select_all(clade_analysis.clade_iqtree_pan_tree),
-    recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff),
-    pirate_aln_gff = clade_analysis.pirate_aln_pan,
-    pirate_presence_absence_csv = select_all(clade_analysis.pirate_presence_absence_csv),
-    cluster_name = cluster_name,
-    cluster_tree = total_iqtree.ml_tree
-    #terra_table = terra_table,
-    #terra_workspace = terra_workspace,
-    #terra_project = terra_project,
+# call summarize.zip_files as zip_files  {
+#   input:
+#     clade_trees = select_all(clade_analysis.clade_iqtree_pan_tree),
+#     recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff),
+#     pirate_aln_gff = clade_analysis.pirate_aln_pan,
+#     pirate_presence_absence_csv = select_all(clade_analysis.pirate_presence_absence_csv),
+#     cluster_name = cluster_name,
+#     cluster_tree = total_iqtree.ml_tree
+#     #terra_table = terra_table,
+#     #terra_workspace = terra_workspace,
+#     #terra_project = terra_project,
     
-}
+# }
 if ( defined(ksnp4.ksnp4_core_snp_matrix_status)) {
 if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
   call utilities.run_note as pipeline_note  {
@@ -217,7 +217,7 @@ call versioning.waphl_version_capture as no_matrix_version {
 
     Array[File?]? plot_roary = clade_analysis.plot_roary
     File tool_versions = select_first([skipped_matrix_version.tool_versions, matrix_version.tool_versions, no_matrix_version.tool_versions])
-    File zipped_output = zip_files.zipped_output
+    #File zipped_output = zip_files.zipped_output
 
     String? pipeline_note = pipeline_note.pipeline_note
   }
