@@ -12,10 +12,10 @@ import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 
 workflow recomb_aware_phylo_analysis {
   input {
-    Array[File] assembly_fasta
+    Array[File]? assembly_fasta
     Array[File] assembly_gff
     Array[String] samplename
-    File reference_genome
+    File? reference_genome
     String cluster_name
     Array[String]? declared_cluster
     Boolean only_clade_analysis = false
