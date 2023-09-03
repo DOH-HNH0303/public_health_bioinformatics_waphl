@@ -2,9 +2,9 @@ version 1.0
 
 task ska {
   input {
-    Array[File] assembly_fasta
+    Array[File]? assembly_fasta
     Array[String] samplename
-    File reference
+    File? reference
     String cluster_name
     Int kmer_size = 19
     String docker_image = "staphb/ska:1.0"
