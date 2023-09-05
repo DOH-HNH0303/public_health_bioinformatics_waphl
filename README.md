@@ -14,6 +14,7 @@ These workflows are written in [WDL](https://github.com/openwdl/wdl), a language
 * TheiaProk workflows for bacterial genomic characterization influenced by Robert Petit's [bactopia](https://github.com/bactopia/bactopia)
 * The PHB workflow user community. To provide feedback to pipeline's not ending in WAPHL, please visit the original repository for [Public Health Bioinformatics](https://github.com/theiagen/public_health_bioinformatics).
 * Tasks using in WAPHL pipelines are highly derived from tasks in the original [Public Health Bioinformatics](https://github.com/theiagen/public_health_bioinformatics) repository created by Theiagen
+* RECAPP is based around the use of Nick Croucher's [Gubbins](https://github.com/nickjcroucher/gubbins)
 
 
 *“DISCLAIMER: This test was adopted, and its performance characteristics determined by the WA PHL. It has not been approved by the FDA. Results are for infection control and epidemiological purposes and should not be used as the sole means for clinical diagnosis or patient management.”*
