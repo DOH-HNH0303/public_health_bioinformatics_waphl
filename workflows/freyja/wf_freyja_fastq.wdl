@@ -127,5 +127,6 @@ workflow freyja_fastq {
     Float? freyja_avg_coverage = epi_output.freyja_avg_coverage
     Float? freyja_perc_uncovered = epi_output.freyja_uncovered
     String? missing_epi = epi_output.missing_epi
+    Float? freyja_summed_abundance = epi_output.freyja_summed_abundance
   }
 }

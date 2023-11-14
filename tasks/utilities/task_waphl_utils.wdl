@@ -153,6 +153,13 @@ task freyja_epi_output {
         text_file.close()
 
   print(abundances, lineages)
+
+  float_abundances = [float(i) for i in lst]
+  ab_sum = sum(float(sub) for sub in test_list)
+  file = open("SUMMED_ABUNDANCE", "w")
+  print(file)
+  a = file.write(ab_sum)
+  file.close()
   assert len(abundances) == len(lineages), "error: There should be one relative abundance for every lineage"
 
   print(len(abundances))
@@ -218,5 +225,6 @@ task freyja_epi_output {
     File? freyja_epi_file = "~{samplename}_for_epi.tsv"
     Float? freyja_unreportable = read_float("UNREPORTABLE")
     String? missing_epi = read_string("MISSING_EPI")
+    Float? freyja_summed_abundance = read_float("SUMMED_ABUNDANCE")
   }
 }
