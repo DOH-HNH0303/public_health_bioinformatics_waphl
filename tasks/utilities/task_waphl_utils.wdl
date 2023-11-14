@@ -155,7 +155,7 @@ task freyja_epi_output {
   print(abundances, lineages)
 
   float_abundances = [float(i) for i in abundances]
-  ab_sum = sum(float(sub) for sub in test_list)
+  ab_sum = sum(float(sub) for sub in float_abundances)
   file = open("SUMMED_ABUNDANCE", "w")
   print(file)
   a = file.write(ab_sum)
