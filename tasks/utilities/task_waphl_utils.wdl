@@ -158,7 +158,7 @@ task freyja_epi_output {
   ab_sum = sum(float(sub) for sub in float_abundances)
   file = open("SUMMED_ABUNDANCE", "w")
   print(file)
-  a = file.write(ab_sum)
+  a = file.write(str(ab_sum))
   file.close()
   assert len(abundances) == len(lineages), "error: There should be one relative abundance for every lineage"
 
