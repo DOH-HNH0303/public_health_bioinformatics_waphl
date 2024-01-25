@@ -1,0 +1,224 @@
+version 1.0
+
+import "wf_clade_analysis_WAPHL.wdl" as clade_analysis
+import "../../tasks/phylogenetic_inference/task_ska.wdl" as ska
+import "../../tasks/phylogenetic_inference/task_iqtree.wdl" as iqtree
+import "../../tasks/phylogenetic_inference/task_gubbins.wdl" as gubbins
+import "../../tasks/task_versioning.wdl" as versioning
+import "wf_ksnp_WAPHL.wdl" as ksnp
+import "../../tasks/utilities/task_utilities.wdl" as utilities
+import "../../tasks/task_versioning.wdl" as versioning
+import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
+
+workflow recomb_aware_phylo_analysis {
+  input {
+    Array[File]? assembly_fasta
+    Array[File] assembly_gff
+    Array[String] samplename
+    File? reference_genome
+    String cluster_name
+    Array[String]? declared_cluster
+    Boolean only_clade_analysis = false
+    # String terra_workspace
+    #String terra_project
+    # String terra_table
+    String iqtree_model = "MFP"
+    Int? snp_clade # = 150
+    Float filter_perc = 35.0
+
+    # Don't touch default values below this line
+    Boolean ksnp4_bool = false
+  }
+
+if (!only_clade_analysis){
+  call ska.ska as ska {
+    input:
+      assembly_fasta = assembly_fasta,
+      samplename = samplename,
+      cluster_name = cluster_name,
+      reference = reference_genome
+}
+call gubbins.gubbins as gubbins_init {
+  input:
+    alignment = ska.ska_aln,
+    filter_perc = filter_perc,
+    cluster_name = cluster_name
+}
+if (gubbins_init.gubbins_mask == true){
+call gubbins.maskrc_svg as mask_gubbins_init  {
+  input:
+    alignment = ska.ska_aln,
+    cluster_name = cluster_name,
+    recomb = gubbins_init.recomb_gff,
+    base_reconstruct = gubbins_init.base_reconstruct,
+    recomb_embl = gubbins_init.recomb_embl,
+    polymorph_site_fasta = gubbins_init.polymorph_site_fasta,
+    polymorph_site_phylip = gubbins_init.polymorph_site_phylip,
+    branch_stats = gubbins_init.branch_stats,
+    gubbins_snps = gubbins_init.gubbins_snps,
+    gubbins_final_tre = gubbins_init.gubbins_final_tre,
+    gubbins_log = gubbins_init.gubbins_log,
+    gubbins_node_tre = gubbins_init.gubbins_node_tre
+}
+}
+call ksnp.ksnp4_workflow as ksnp4  {
+  input:
+    assembly_fasta = select_first([mask_gubbins_init.masked_fasta_list, assembly_fasta]),
+    samplename = samplename,
+    cluster_name = cluster_name
+}
+
+  call iqtree.iqtree as total_iqtree {
+    input:
+      alignment = ksnp4.ksnp4_core_matrix,
+      cluster_name = cluster_name,
+      iqtree_model = iqtree_model
+  }
+
+if (defined(snp_clade)) {
+call utilities.split_by_clade as split_by_clade  {
+  input:
+    snp_matrix = ksnp4.ksnp4_core_snp_matrix_og,
+    cluster_name = cluster_name,
+    snp_clade = snp_clade
+}
+}
+}
+
+if (defined(declared_cluster)) {
+  call utilities.split_by_declared_cluster as split_by_declared_cluster  {
+  input:
+    declared_cluster = declared_cluster,
+    cluster_name = cluster_name,
+    samplename = samplename
+}
+}
+
+scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]), range(length(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]))))) {
+if (length(select_all(pair.left)) >= 3){
+call utilities.scatter_by_clade as scatter_by_clade  {
+  input:
+    clade_list = pair.left,
+    cluster_name = cluster_name,
+    assembly_files = assembly_gff
+}
+
+call clade_analysis.clade_analysis as clade_analysis  {
+  input:
+    cluster_name = "~{cluster_name + '_' + pair.right + '_'}clade",
+    filter_perc = filter_perc,
+    prokka_gff = scatter_by_clade.clade_files,
+    samplename = scatter_by_clade.samplename
+}
+}
+}
+
+
+
+# call summarize.zip_files as zip_files  {
+#   input:
+#     clade_trees = select_all(clade_analysis.clade_iqtree_pan_tree),
+#     recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff),
+#     pirate_aln_gff = clade_analysis.pirate_aln_pan,
+#     pirate_presence_absence_csv = select_all(clade_analysis.pirate_presence_absence_csv),
+#     cluster_name = cluster_name,
+#     cluster_tree = total_iqtree.ml_tree
+#     #terra_table = terra_table,
+#     #terra_workspace = terra_workspace,
+#     #terra_project = terra_project,
+    
+# }
+if ( defined(ksnp4.ksnp4_core_snp_matrix_status)) {
+if (ksnp4.ksnp4_core_snp_matrix_status == "Number core SNPs: 0"){
+  call utilities.run_note as pipeline_note  {
+  input:
+    note = "Number core SNPs: 0, no trees could be produced."
+}
+}
+if ( ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix was produced"){
+call versioning.waphl_version_capture as matrix_version {
+  input:
+    input_1 = ska.ska_docker_image,
+    input_2 = gubbins_init.gubbins_docker_image,
+    input_3 = mask_gubbins_init.maskrc_docker_image,
+    input_4 = ksnp4.ksnp4_docker,
+    input_5 = total_iqtree.version,
+    input_6 = ksnp4.ksnp4_snp_dists_version,
+    input_7 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
+    input_8 = select_first(scatter_by_clade.scatter_clade_docker_image),
+    input_9 = select_first(clade_analysis.pirate_docker_image),
+    input_11 = select_first(clade_analysis.maskrc_docker_image),
+    input_13 = select_first(clade_analysis.iqtree_version),
+    input_14 = select_first(clade_analysis.snp_dist_version)
+  }
+  }
+if (ksnp4.ksnp4_core_snp_matrix_status == "The core SNP matrix could not be produced"){
+call versioning.waphl_version_capture as no_matrix_version {
+  input:
+    input_1 = ska.ska_docker_image,
+    input_2 = gubbins_init.gubbins_docker_image,
+    input_3 = mask_gubbins_init.maskrc_docker_image,
+    input_4 = ksnp4.ksnp4_docker,
+    input_5 = total_iqtree.version,
+    input_6 = ksnp4.ksnp4_snp_dists_version
+  }
+  }
+  }
+  if ( only_clade_analysis) {
+  call versioning.waphl_version_capture as skipped_matrix_version {
+  input:
+    input_1 = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.split_clade_docker_image]),
+    input_2 = select_first(scatter_by_clade.scatter_clade_docker_image),
+    input_3 = select_first(clade_analysis.pirate_docker_image),
+    input_4 = select_first(clade_analysis.maskrc_docker_image),
+    input_5 = select_first(clade_analysis.iqtree_version),
+    input_6 = select_first(clade_analysis.snp_dist_version)
+  }
+  }
+
+  output {
+    File? ska_aln = ska.ska_aln
+    String? gubbins_date = gubbins_init.date
+    String? ska_docker = ska.ska_docker_image
+
+    File? gubbins_polymorph_site_fasta = gubbins_init.polymorph_site_fasta
+    File? gubbins_polymorph_site_phylip = gubbins_init.polymorph_site_phylip
+    File? gubbins_branch_stats = gubbins_init.branch_stats
+    File? gubbins_recomb_gff = gubbins_init.recomb_gff
+    File? gubbins_snps= gubbins_init.gubbins_snps
+
+    File? masked_fastas = mask_gubbins_init.masked_fastas
+    #Array[File?] masked_fasta_list = mask_gubbins_init.masked_fasta_list
+
+    File? tree = total_iqtree.ml_tree
+
+    File? clade_list_file = select_first([split_by_declared_cluster.clade_list_file, split_by_clade.clade_list_file])
+
+    ###Array[File?]? gubbins_clade_polymorph_fasta = select_all(clade_analysis.gubbins_clade_polymorph_fasta)
+    ###Array[File?]? gubbins_clade_branch_stats = select_all(clade_analysis.gubbins_clade_branch_stats)
+    #Array[File?]? gubbins_clade_recomb_gff = select_all(clade_analysis.gubbins_clade_recomb_gff)
+
+    ###Array[File] pirate_pangenome_summary = select_all(clade_analysis.pirate_pangenome_summary)
+    ### Array[File] pirate_gene_families_ordered = select_all(clade_analysis.pirate_gene_families_ordered)
+    Array[String?]? pirate_docker_image = select_all(clade_analysis.pirate_docker_image)
+    Array[File?]? pirate_gene_presence_absence = select_all(clade_analysis.pirate_presence_absence_csv)
+    Array[File?]? pirate_aln_pan = select_all(clade_analysis.pirate_aln_pan)
+    Array[File?]? pirate_aln_core = select_all(clade_analysis.pirate_aln_core)
+    # snp_dists outputs
+    Array[String?]? clade_snps_dists_version = select_all(clade_analysis.clade_snps_dists_version)
+    ###Array[File?]? clade_core_snp_matrix = select_all(clade_analysis.clade_core_snp_matrix)
+    ###Array[File?]? clade_pan_snp_matrix = select_all(clade_analysis.clade_pan_snp_matrix)
+    # iqtree outputs
+    Array[String?] clade_iqtree_version = select_all(clade_analysis.clade_iqtree_version)
+    Array[File?] clade_iqtree_core_tree = select_all(clade_analysis.clade_iqtree_core_tree)
+    Array[File?]? clade_iqtree_pan_tree = select_all(clade_analysis.clade_iqtree_pan_tree)
+    Array[String?] clade_iqtree_pan_model = select_all(clade_analysis.clade_iqtree_pan_model)
+    Array[String?] clade_iqtree_core_model = select_all(clade_analysis.clade_iqtree_core_model)
+
+    Array[File?]? plot_roary = select_all(clade_analysis.plot_roary)
+    File tool_versions = select_first([skipped_matrix_version.tool_versions, matrix_version.tool_versions, no_matrix_version.tool_versions])
+    #File zipped_output = zip_files.zipped_output
+
+    String? pipeline_note = pipeline_note.pipeline_note
+  }
+}

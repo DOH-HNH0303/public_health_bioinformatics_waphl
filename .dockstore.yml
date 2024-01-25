@@ -1,5 +1,45 @@
 version: 1.2
 workflows:
+ - name: cgMLST
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_cgMLST_waphl.wdl
+   testParameterFiles:
+    - empty.json
+ - name: create_cgMLST_schema
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_create_cgMLST_schema_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
+ - name: kSNP3
+   subclass: WDL
+   primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp3.wdl
+   testParameterFiles:
+    - empty.json
+ - name: kSNP3_WAPHL
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_ksnp3_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
+ - name: kSNP4_WAPHL
+   subclass: WDL
+   primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Gambit_Query
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_gambit_query.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Kleborate
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_kleborate.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Pangenome_SNP_WAPHL
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_pangenome_snp_waphl.wdl
+   testParameterFiles:
+    - empty.json
  - name: TheiaEuk_Illumina_PE_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/theiaeuk/wf_theiaeuk_illumina_pe.wdl
@@ -94,10 +134,15 @@ workflows:
    subclass: WDL
    primaryDescriptorPath: /workflows/theiacov/updates/wf_ncbi_scrub_pe.wdl
    testParameterFiles:
-    - empty.json
+    - empty.json  
  - name: Freyja_FASTQ_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/freyja/wf_freyja_fastq.wdl
+   testParameterFiles:
+    - empty.json
+ - name: prep_bigdb_cgmlst
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_prep_cgmlst_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: Freyja_Plot_PHB
@@ -113,6 +158,11 @@ workflows:
  - name: Freyja_Update_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/freyja/wf_freyja_update.wdl
+   testParameterFiles:
+    - empty.json
+ - name: WW_for_Epi_PHB
+   subclass: WDL
+   primaryDescriptorPath: /workflows/freyja/wf_ww_for_epi_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: kSNP3_PHB
@@ -145,11 +195,17 @@ workflows:
    primaryDescriptorPath: /workflows/theiaprok/wf_theiaprok_fasta.wdl
    testParameterFiles:
     - empty.json
+ - name: TheiaProk_Illumina_PE_WAPHL
+   subclass: WDL
+   primaryDescriptorPath: /workflows/theiaprok/wf_theiaprok_illumina_pe_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
  - name: TheiaProk_ONT_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/theiaprok/wf_theiaprok_ont.wdl
    testParameterFiles:
     - empty.json
+    
  - name: Gambit_Query_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/standalone_modules/wf_gambit_query.wdl
@@ -223,6 +279,26 @@ workflows:
  - name: Assembly_Fetch_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/utilities/data_import/wf_assembly_fetch.wdl
+   testParameterFiles:
+    - empty.json
+ - name: RECAPP
+   subclass: WDL
+   primaryDescriptorPath: /workflows/phylogenetics/wf_RECAPP_waphl.wdl
+   testParameterFiles:
+    - empty.json  
+ - name: recomb_clade_analysis
+   subclass: WDL
+   primaryDescriptorPath: /workflows/phylogenetics/wf_clade_analysis_WAPHL.wdl
+   testParameterFiles:
+    - empty.json
+ - name: fetch_from_zip
+   subclass: WDL
+   primaryDescriptorPath: /workflows/fetch_from_zip.wdl
+   testParameterFiles:
+    - empty.json
+ - name: WAPHL_bs_fetch
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_bs_fetch_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: TheiaValidate_PHB

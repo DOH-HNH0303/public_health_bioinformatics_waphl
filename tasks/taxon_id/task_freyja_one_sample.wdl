@@ -8,11 +8,11 @@ task freyja_one_sample {
     File? freyja_usher_barcodes
     File? freyja_lineage_metadata
     Float? eps
-    Boolean update_db = false
+    Boolean update_db = true
     Boolean confirmed_only = false
     Boolean bootstrap = false
     Int? number_bootstraps
-    Int memory = 4
+    Int memory = 12
     String docker = "us-docker.pkg.dev/general-theiagen/staphb/freyja:1.4.8"
     Int disk_size = 100
   }
@@ -93,7 +93,7 @@ task freyja_one_sample {
   >>>
   runtime {
     memory: "~{memory} GB"
-    cpu: 2
+    cpu: 4
     docker: "~{docker}"
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES

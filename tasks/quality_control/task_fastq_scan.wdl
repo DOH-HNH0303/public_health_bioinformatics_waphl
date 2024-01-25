@@ -7,7 +7,8 @@ task fastq_scan_pe {
     String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
     String read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
     Int disk_size = 100
-    String docker = "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
+    String docker = "us-docker.pkg.dev/general-theiagen/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
+    Int memory = 12
   }
   command <<<
     # capture date and version
@@ -49,9 +50,9 @@ task fastq_scan_pe {
     String fastq_scan_docker = docker
   }
   runtime {
-    docker: "us-docker.pkg.dev/general-theiagen/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
-    memory: "2 GB"
-    cpu: 2
+    docker: "~{docker}"
+    memory: memory  +" GB"
+    cpu: 4
     disks:  "local-disk " + disk_size + " SSD"
     disk: disk_size + " GB" # TES
     preemptible: 0
@@ -64,7 +65,7 @@ task fastq_scan_se {
     File read1
     String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
     Int disk_size = 100
-    String docker = "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
+    String docker = "us-docker.pkg.dev/general-theiagen/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
   }
   command <<<
     # capture date and version
@@ -90,7 +91,7 @@ task fastq_scan_se {
     String fastq_scan_docker = docker
   }
   runtime {
-    docker: "us-docker.pkg.dev/general-theiagen/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
+    docker: "~{docker}"
     memory: "2 GB"
     cpu: 2
     disks:  "local-disk " + disk_size + " SSD"

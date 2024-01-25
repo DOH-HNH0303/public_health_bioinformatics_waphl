@@ -81,11 +81,18 @@ task resfinder {
       # rename file to have proper extension & samplename included
       mv -v "pheno_table_${resfinder_organism}.txt" ~{samplename}_pheno_table_species.tsv
     fi
-    mv -v ResFinder_Hit_in_genome_seq.fsa ~{samplename}_ResFinder_Hit_in_genome_seq.fsa
-    mv -v ResFinder_Resistance_gene_seq.fsa ~{samplename}_ResFinder_Resistance_gene_seq.fsa
-    mv -v ResFinder_results_tab.txt ~{samplename}_ResFinder_results_tab.tsv
+    mv ResFinder_Hit_in_genome_seq.fsa ~{samplename}_ResFinder_Hit_in_genome_seq.fsa
+    mv ResFinder_Resistance_gene_seq.fsa ~{samplename}_ResFinder_Resistance_gene_seq.fsa
+    mv ResFinder_results_tab.txt ~{samplename}_ResFinder_results_tab.tsv
 
-    # if pointfinder was run, rename files
+    amr_genes=$(awk -F '\t' '{ print $1 }' ~{samplename}_ResFinder_results_tab.tsv | tail -n+2 | tr '\n' ',' | sed 's/.$//')
+    if [ -z "${amr_genes}" ]; then
+       abricate_genes="No amr genes detected by resfinder"
+    fi
+
+    # create final output strings
+    echo "${amr_genes}" > AMR_GENES
+
     if [ -f PointFinder_prediction.txt ]; then
       mv -v PointFinder_prediction.txt ~{samplename}_PointFinder_prediction.tsv
       mv -v PointFinder_results.txt ~{samplename}_PointFinder_results.tsv
@@ -173,6 +180,7 @@ task resfinder {
     File? resfinder_pheno_table_species = "~{samplename}_pheno_table_species.tsv"
     File resfinder_hit_in_genome_seq = "~{samplename}_ResFinder_Hit_in_genome_seq.fsa"
     File resfinder_resistance_gene_seq = "~{samplename}_ResFinder_Resistance_gene_seq.fsa"
+    String resfinder_amr_genes = read_string("AMR_GENES")
     File resfinder_results_tab = "~{samplename}_ResFinder_results_tab.tsv"
     File? pointfinder_pheno_table = "~{samplename}_PointFinder_prediction.tsv"
     File? pointfinder_results = "~{samplename}_PointFinder_results.tsv"

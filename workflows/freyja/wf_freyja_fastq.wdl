@@ -5,6 +5,7 @@ import "../utilities/wf_read_QC_trim_pe.wdl" as read_qc
 import "../../tasks/alignment/task_bwa.wdl" as align
 import "../../tasks/assembly/task_ivar_primer_trim.wdl" as trim_primers
 import "../../tasks/task_versioning.wdl" as versioning
+import "../../tasks/utilities/task_waphl_utils.wdl" as waphl_utils
 
 workflow freyja_fastq {
   input {
@@ -12,8 +13,12 @@ workflow freyja_fastq {
     File read2_raw
     File primer_bed
     File reference_genome
+    File ww_metadata_csv
     Int trimmomatic_minlen = 25
     String samplename
+    String? samplecollectdate
+    String? wwtpname
+    String? submittersamplenumber
   }
   call read_qc.read_QC_trim_pe as read_QC_trim {
     input:
@@ -41,6 +46,20 @@ workflow freyja_fastq {
       primer_trimmed_bam = primer_trim.trim_sorted_bam,
       samplename = samplename,
       reference_genome = reference_genome
+  }
+    call waphl_utils.freyja_epi_metadata as epi_input {
+    input:
+      ww_metadata_csv = ww_metadata_csv,
+      samplename = samplename
+  }
+  call waphl_utils.freyja_epi_output as epi_output {
+    input:
+      submittersamplenumber = select_first([submittersamplenumber, epi_input.SubmitterSampleNumber]),
+      wwtpname = select_first([wwtpname, epi_input.WWTPName]),
+      samplecollectdate = select_first([samplecollectdate, epi_input.SampleCollectDate]),
+      freyja_demixed = freyja.freyja_demixed,
+      freyja_depths = freyja.freyja_depths,
+      samplename = samplename
   }
   call versioning.version_capture{
     input:
@@ -97,7 +116,13 @@ workflow freyja_fastq {
     String ivar_version_primtrim = primer_trim.ivar_version
     String samtools_version_primtrim = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
-    # Freyja Analysis outputs
+    # sample metadata
+    String? SubmitterSampleNumber = epi_input.SubmitterSampleNumber
+    String? WWTPName = epi_input.WWTPName
+    String? SampleCollectDate = epi_input.SampleCollectDate
+    String epi_metadata_docker = epi_input.epi_metadata_docker
+    String epi_metadata_file = ww_metadata_csv
+    # Freyja Analysis
     String freyja_version = freyja.freyja_version
     File freyja_variants = freyja.freyja_variants
     File freyja_depths = freyja.freyja_depths
@@ -108,5 +133,14 @@ workflow freyja_fastq {
     File? freyja_bootstrap_lineages_pdf = freyja.freyja_bootstrap_lineages_pdf
     File? freyja_bootstrap_summary = freyja.freyja_bootstrap_summary
     File? freyja_bootstrap_summary_pdf = freyja.freyja_bootstrap_summary_pdf
+    # output for epi
+    File? freyja_epi_file = epi_output.freyja_epi_file
+    String? freyja_abundances = epi_output.freyja_abundances
+    Float? freyja_unreportable = epi_output.freyja_unreportable
+    String? freyja_resid = epi_output.freyja_resid
+    String? freyja_10x_coverage = epi_output.freyja_coverage
+    Float? freyja_avg_coverage = epi_output.freyja_avg_coverage
+    Float? freyja_perc_uncovered = epi_output.freyja_uncovered
+    String? missing_epi = epi_output.missing_epi
   }
 }
