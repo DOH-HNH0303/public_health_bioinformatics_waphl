@@ -125,17 +125,6 @@ workflow read_QC_trim_pe {
         midas_db = midas_db
     }
   }
-  if ("~{workflow_series}" == "theiaprok") {
-    if (call_kraken) {
-      call kraken.kraken2_standalone {
-        input:
-          samplename = samplename,
-          read1 = read1_raw,
-          read2 = read2_raw,
-          kraken2_db = select_first([kraken_db])
-      }
-    }
-  }
   if ("~{workflow_series}" == "theiameta") {
     call readlength_task.readlength {
       input:
