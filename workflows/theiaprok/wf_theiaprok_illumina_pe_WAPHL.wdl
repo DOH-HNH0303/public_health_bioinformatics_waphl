@@ -5,32 +5,34 @@ import "../utilities/wf_merlin_magic.wdl" as merlin_magic_workflow
 import "../../tasks/assembly/task_shovill.wdl" as shovill
 import "../../tasks/quality_control/task_quast.wdl" as quast_task
 import "../../tasks/quality_control/task_cg_pipeline.wdl" as cg_pipeline
-import "../../tasks/taxon_id/task_gambit.wdl" as gambit_task
 import "../../tasks/gene_typing/task_abricate.wdl" as abricate
 import "../../tasks/species_typing/task_serotypefinder.wdl" as serotypefinder
-import "../../tasks/task_versioning.wdl" as versioning
-import "../../tasks/utilities/task_broad_terra_tools.wdl" as terra_tools
 import "../../tasks/quality_control/task_general_qc.wdl" as general_qc
 
 #Theiagen packages added
 import "../../tasks/quality_control/task_screen.wdl" as screen
 import "../../tasks/quality_control/task_busco.wdl" as busco_task
-import "../../tasks/quality_control/task_qc_check_phb.wdl" as qc_check
+import "../../tasks/taxon_id/task_gambit.wdl" as gambit_task
+
 import "../../tasks/quality_control/task_mummer_ani.wdl" as ani_task
-import "../../tasks/quality_control/task_qc_utils.wdl" as qc
+import "../../tasks/taxon_id/task_kmerfinder.wdl" as kmerfinder_task
+#import "../../tasks/quality_control/task_qc_utils.wdl" as qc
 import "../../tasks/gene_typing/task_amrfinderplus.wdl" as amrfinderplus
 import "../../tasks/gene_typing/task_resfinder.wdl" as resfinder
 import "../../tasks/species_typing/task_ts_mlst.wdl" as ts_mlst_task
 import "../../tasks/gene_typing/task_bakta.wdl" as bakta_task
 import "../../tasks/gene_typing/task_prokka.wdl" as prokka_task
 import "../../tasks/gene_typing/task_plasmidfinder.wdl" as plasmidfinder_task
+import "../../tasks/quality_control/task_qc_check_phb.wdl" as qc_check
+import "../../tasks/task_versioning.wdl" as versioning
+import "../../tasks/utilities/task_broad_terra_tools.wdl" as terra_tools
 import "../../tasks/utilities/task_utilities.wdl" as utilities
 
 import "../../tasks/taxon_id/task_taxon_id_waphl.wdl" as taxon_id
 import "../../tasks/taxon_id/task_fastani.wdl" as fastani
 #import "../../tasks/task_denovo_assembly.wdl" as assembly
 #import "../../tasks/task_read_clean.wdl" as read_clean
-import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
+#import "../../tasks/utilities/task_summarize_table_waphl.wdl" as summarize
 
 
 workflow theiaprok_illumina_pe_waphl {
@@ -42,17 +44,20 @@ workflow theiaprok_illumina_pe_waphl {
     String seq_method = "ILLUMINA"
     File read1_raw
     File read2_raw
-    String? run_id
-    File? taxon_table
-    String terra_table
-    String terra_project = "NA"
-    String terra_workspace = "NA"
     Int? genome_size
+    # export taxon table parameters
+    String? run_id
     String? collection_date
     String? originating_lab
     String? city
     String? county
     String? zip
+    File? taxon_tables
+    #String terra_table
+    String terra_project = "NA"
+    String terra_workspace = "NA"
+    # read screen parameters
+    Boolean skip_screen = false
     Int min_reads = 7472
     Int min_basepairs = 2241820
     Int min_genome_size = 100000
@@ -65,13 +70,13 @@ workflow theiaprok_illumina_pe_waphl {
     Int trim_window_size = 10
      # module options
     Boolean call_ani = false # by default do not call ANI task, but user has ability to enable this task if working with enteric pathogens or supply their own high-quality reference genome
+    Boolean call_kmerfinder = false 
     Boolean call_resfinder = false
-    Boolean skip_screen = false
     String wget_dt_docker_image = "inutano/wget:1.20.3-r1"
     String genome_annotation = "prokka" # options: "prokka" or "bakta"
     # qc check parameters
+    String? expected_taxon  # allow user to provide organism (e.g. "Clostridioides_difficile") string to amrfinder. Useful when gambit does not predict the correct species    # qc check parameters
     File? qc_check_table
-    String? expected_taxon
   }
   call versioning.version_capture{
     input:
@@ -104,6 +109,7 @@ workflow theiaprok_illumina_pe_waphl {
         trim_minlen = trim_minlen,
         trim_quality_trim_score = trim_quality_trim_score,
         trim_window_size = trim_window_size
+        workflow_series = "theiaprok"
     }
 
     call taxon_id.kraken2 as kraken2_clean {
@@ -173,18 +179,25 @@ workflow theiaprok_illumina_pe_waphl {
           samplename = samplename
       }
       }
+      if (call_kmerfinder) {
+        call kmerfinder_task.kmerfinder_bacteria as kmerfinder {
+          input:
+            assembly = shovill_pe.assembly_fasta,
+            samplename = samplename
+        }
+      }
       call amrfinderplus.amrfinderplus_nuc as amrfinderplus_task {
         input:
           assembly = shovill_pe.assembly_fasta,
           samplename = samplename,
-          organism = gambit.gambit_predicted_taxon
+          organism = select_first([expected_taxon, gambit.gambit_predicted_taxon])
       }
       if (call_resfinder) {
       call resfinder.resfinder as resfinder_task {
         input:
           assembly = shovill_pe.assembly_fasta,
           samplename = samplename,
-          organism = gambit.gambit_predicted_taxon
+          organism = select_first([expected_taxon, gambit.gambit_predicted_taxon])
         }
       }
       call ts_mlst_task.ts_mlst {
@@ -290,7 +303,7 @@ workflow theiaprok_illumina_pe_waphl {
   if  (kraken2_clean.kraken2_genus!="Legionella" || kraken2_clean.kraken2_genus!="Tatlockia" ||kraken2_clean.kraken2_genus!="Corynebacterium" || kraken2_clean.kraken2_genus!="Fluoribacter"){
     call merlin_magic_workflow.merlin_magic {
       input:
-        merlin_tag = gambit.merlin_tag,
+        merlin_tag = select_first([expected_taxon, gambit.merlin_tag]),
         assembly = shovill_pe.assembly_fasta,
         samplename = samplename,
         read1 = read_QC_trim.read1_clean,
@@ -330,6 +343,18 @@ workflow theiaprok_illumina_pe_waphl {
     Int? num_reads_clean1 = read_QC_trim.fastq_scan_clean1
     Int? num_reads_clean2 = read_QC_trim.fastq_scan_clean2
     String? num_reads_clean_pairs = read_QC_trim.fastq_scan_clean_pairs
+    # Read QC - fastqc outputs
+    Int? fastqc_num_reads_raw1 = read_QC_trim.fastqc_raw1
+    Int? fastqc_num_reads_raw2 = read_QC_trim.fastqc_raw2
+    String? fastqc_num_reads_raw_pairs = read_QC_trim.fastqc_raw_pairs
+    File? fastqc_raw1_html = read_QC_trim.fastqc_raw1_html
+    File? fastqc_raw2_html = read_QC_trim.fastqc_raw2_html
+    String? fastqc_version = read_QC_trim.fastqc_version
+    Int? fastqc_num_reads_clean1 = read_QC_trim.fastqc_clean1
+    Int? fastqc_num_reads_clean2 = read_QC_trim.fastqc_clean2
+    String? fastqc_num_reads_clean_pairs = read_QC_trim.fastqc_clean_pairs
+    File? fastqc_clean1_html = read_QC_trim.fastqc_clean1_html
+    File? fastqc_clean2_html = read_QC_trim.fastqc_clean2_html
     # Read QC - trimmomatic outputs
     String? trimmomatic_version = read_QC_trim.trimmomatic_version
     #String? trimmomatic_software = read_QC_trim.trimmomatic_pe_software
@@ -442,6 +467,14 @@ workflow theiaprok_illumina_pe_waphl {
     File? ani_output_tsv = ani.ani_output_tsv
     String? ani_top_species_match = ani.ani_top_species_match
     String? ani_mummer_version = ani.ani_mummer_version
+    String? ani_mummer_docker = ani.ani_docker
+    # kmerfinder outputs
+    String? kmerfinder_docker = kmerfinder.kmerfinder_docker
+    File? kmerfinder_results_tsv = kmerfinder.kmerfinder_results_tsv
+    String? kmerfinder_top_hit = kmerfinder.kmerfinder_top_hit
+    String? kmerfinder_query_coverage = kmerfinder.kmerfinder_query_coverage
+    String? kmerfinder_template_coverage = kmerfinder.kmerfinder_template_coverage
+    String? kmerfinder_database = kmerfinder.kmerfinder_database
     # NCBI-AMRFinderPlus Outputs
     File? amrfinderplus_all_report = amrfinderplus_task.amrfinderplus_all_report
     File? amrfinderplus_amr_report = amrfinderplus_task.amrfinderplus_amr_report
@@ -468,6 +501,14 @@ workflow theiaprok_illumina_pe_waphl {
     File? resfinder_results = resfinder_task.resfinder_results_tab
     File? resfinder_pointfinder_pheno_table = resfinder_task.pointfinder_pheno_table
     File? resfinder_pointfinder_results = resfinder_task.pointfinder_results
+    String? resfinder_predicted_pheno_resistance = resfinder_task.resfinder_predicted_pheno_resistance
+    String? resfinder_predicted_xdr_shigella = resfinder_task.resfinder_predicted_xdr_shigella
+    String? resfinder_predicted_resistance_Amp = resfinder_task.resfinder_predicted_resistance_Amp
+    String? resfinder_predicted_resistance_Azm = resfinder_task.resfinder_predicted_resistance_Azm
+    String? resfinder_predicted_resistance_Axo = resfinder_task.resfinder_predicted_resistance_Axo
+    String? resfinder_predicted_resistance_Cip = resfinder_task.resfinder_predicted_resistance_Cip
+    String? resfinder_predicted_resistance_Smx = resfinder_task.resfinder_predicted_resistance_Smx
+    String? resfinder_predicted_resistance_Tmp = resfinder_task.resfinder_predicted_resistance_Tmp
     String? resfinder_db_version = resfinder_task.resfinder_db_version
     String? resfinder_docker = resfinder_task.resfinder_docker
     # Virulence Genes
@@ -482,6 +523,7 @@ workflow theiaprok_illumina_pe_waphl {
     String? ts_mlst_allelic_profile = ts_mlst.ts_mlst_allelic_profile
     String? ts_mlst_version = ts_mlst.ts_mlst_version
     File? ts_mlst_novel_alleles = ts_mlst.ts_mlst_novel_alleles
+    String? ts_mlst_docker = ts_mlst.ts_mlst_docker
     # Prokka Results
     File? prokka_gff = prokka.prokka_gff
     File? prokka_gbk = prokka.prokka_gbk
@@ -567,7 +609,7 @@ workflow theiaprok_illumina_pe_waphl {
     # Salmonella Typing
     File? sistr_results = merlin_magic.sistr_results
     File? sistr_allele_json = merlin_magic.sistr_allele_json
-    File? sister_allele_fasta = merlin_magic.sistr_allele_fasta
+    File? sistr_allele_fasta = merlin_magic.sistr_allele_fasta
     File? sistr_cgmlst = merlin_magic.sistr_cgmlst
     String? sistr_version = merlin_magic.sistr_version
     String? sistr_predicted_serotype = merlin_magic.sistr_predicted_serotype
@@ -597,6 +639,8 @@ workflow theiaprok_illumina_pe_waphl {
     String? kleborate_otype = merlin_magic.kleborate_otype
     String? kleborate_klocus_confidence = merlin_magic.kleborate_klocus_confidence
     String? kleborate_olocus_confidence = merlin_magic.kleborate_olocus_confidence
+    String? kleborate_virulence_score = merlin_magic.kleborate_virulence_score
+    String? kleborate_resistance_score = merlin_magic.kleborate_resistance_score
     # Neisseria gonorrhoeae Typing
     File? ngmaster_tsv = merlin_magic.ngmaster_tsv
     String? ngmaster_version = merlin_magic.ngmaster_version
@@ -640,16 +684,21 @@ workflow theiaprok_illumina_pe_waphl {
     File? tbprofiler_output_file = merlin_magic.tbprofiler_output_file
     File? tbprofiler_output_bam = merlin_magic.tbprofiler_output_bam
     File? tbprofiler_output_bai = merlin_magic.tbprofiler_output_bai
+    File? tbprofiler_output_vcf = merlin_magic.tbprofiler_output_vcf
     String? tbprofiler_version = merlin_magic.tbprofiler_version
     String? tbprofiler_main_lineage = merlin_magic.tbprofiler_main_lineage
     String? tbprofiler_sub_lineage = merlin_magic.tbprofiler_sub_lineage
     String? tbprofiler_dr_type = merlin_magic.tbprofiler_dr_type
     String? tbprofiler_resistance_genes = merlin_magic.tbprofiler_resistance_genes
-    File? tbprofiler_lims_report_csv = merlin_magic.tbprofiler_lims_report_csv
-    File? tbprofiler_looker_csv = merlin_magic.tbprofiler_looker_csv
-    File? tbprofiler_laboratorian_report_csv = merlin_magic.tbprofiler_laboratorian_report_csv
-    File? tbprofiler_resistance_genes_percent_coverage = merlin_magic.tb_resistance_genes_percent_coverage
-    # Legionella pneumophila typing
+    File? tbp_parser_lims_report_csv = merlin_magic.tbp_parser_lims_report_csv
+    File? tbp_parser_looker_report_csv = merlin_magic.tbp_parser_looker_report_csv
+    File? tbp_parser_laboratorian_report_csv = merlin_magic.tbp_parser_laboratorian_report_csv
+    File? tbp_parser_coverage_report = merlin_magic.tbp_parser_coverage_report
+    Float? tbp_parser_genome_percent_coverage = merlin_magic.tbp_parser_genome_percent_coverage
+    Float? tbp_parser_average_genome_depth = merlin_magic.tbp_parser_average_genome_depth
+    File? clockwork_decontaminated_read1 = merlin_magic.clockwork_cleaned_read1
+    File? clockwork_decontaminated_read2 = merlin_magic.clockwork_cleaned_read2
+     # Legionella pneumophila typing
     File? legsta_results = merlin_magic.legsta_results
     String? legsta_predicted_sbt = merlin_magic.legsta_predicted_sbt
     String? legsta_version = merlin_magic.legsta_version
