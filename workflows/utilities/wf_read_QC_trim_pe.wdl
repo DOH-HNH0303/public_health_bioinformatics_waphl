@@ -170,17 +170,17 @@ workflow read_QC_trim_pe {
     File? fastqc_clean2_html = fastqc_clean.read2_fastqc_html
     
     # kraken2 - theiacov and theiaprok
-    String kraken_version = select_first([kraken2_theiacov_raw.version, kraken2_standalone.kraken2_version, ""])
+    String? kraken_version = select_first([kraken2_theiacov_raw.version, kraken2_standalone.kraken2_version, ""])
     Float? kraken_human =  kraken2_theiacov_raw.percent_human
     Float? kraken_sc2 = kraken2_theiacov_raw.percent_sc2
     String? kraken_target_org = kraken2_theiacov_raw.percent_target_org
-    String kraken_report = select_first([kraken2_theiacov_raw.kraken_report, kraken2_standalone.kraken2_report, ""])
+    String? kraken_report = select_first([kraken2_theiacov_raw.kraken_report, kraken2_standalone.kraken2_report, ""])
     Float? kraken_human_dehosted = kraken2_theiacov_dehosted.percent_human
     Float? kraken_sc2_dehosted = kraken2_theiacov_dehosted.percent_sc2
     String? kraken_target_org_dehosted = kraken2_theiacov_dehosted.percent_target_org
     String? kraken_target_org_name = target_org
     File? kraken_report_dehosted = kraken2_theiacov_dehosted.kraken_report
-    String kraken_docker = select_first([kraken2_theiacov_raw.docker, kraken2_standalone.kraken2_docker, ""])
+    String? kraken_docker = select_first([kraken2_theiacov_raw.docker, kraken2_standalone.kraken2_docker, ""])
     
     # trimming versioning
     String? trimmomatic_version = trimmomatic_pe.version
