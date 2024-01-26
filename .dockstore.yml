@@ -1,15 +1,15 @@
 version: 1.2
 workflows:
- - name: cgMLST
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_cgMLST_waphl.wdl
-   testParameterFiles:
-    - empty.json
- - name: create_cgMLST_schema
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_create_cgMLST_schema_WAPHL.wdl
-   testParameterFiles:
-    - empty.json
+#  - name: cgMLST
+#    subclass: WDL
+#    primaryDescriptorPath: /workflows/wf_cgMLST_waphl.wdl
+#    testParameterFiles:
+#     - empty.json
+#  - name: create_cgMLST_schema
+#    subclass: WDL
+#    primaryDescriptorPath: /workflows/wf_create_cgMLST_schema_WAPHL.wdl
+#    testParameterFiles:
+#     - empty.json
  - name: kSNP3
    subclass: WDL
    primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp3.wdl
@@ -17,7 +17,7 @@ workflows:
     - empty.json
  - name: kSNP3_WAPHL
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_ksnp3_WAPHL.wdl
+   primaryDescriptorPath: /workflows/phylogenetics/wf_ksnp3_WAPHL.wdl
    testParameterFiles:
     - empty.json
  - name: kSNP4_WAPHL
@@ -27,19 +27,19 @@ workflows:
     - empty.json
  - name: Gambit_Query
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_gambit_query.wdl
+   primaryDescriptorPath: /workflows/standalone_modules/wf_gambit_query.wdl
    testParameterFiles:
     - empty.json
- - name: Kleborate
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_kleborate.wdl
-   testParameterFiles:
-    - empty.json
- - name: Pangenome_SNP_WAPHL
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_pangenome_snp_waphl.wdl
-   testParameterFiles:
-    - empty.json
+#  - name: Kleborate
+#    subclass: WDL
+#    primaryDescriptorPath: /workflows/wf_kleborate.wdl
+#    testParameterFiles:
+#     - empty.json
+#  - name: Pangenome_SNP_WAPHL
+#    subclass: WDL
+#    primaryDescriptorPath: /workflows/wf_pangenome_snp_waphl.wdl
+#    testParameterFiles:
+#     - empty.json
  - name: TheiaEuk_Illumina_PE_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/theiaeuk/wf_theiaeuk_illumina_pe.wdl
