@@ -224,40 +224,40 @@ workflow theiaprok_illumina_pe_waphl {
           assembly = shovill_pe.assembly_fasta,
           samplename = samplename
       }
-      if(defined(qc_check_table)) {
-        call qc_check.qc_check_phb as qc_check_task {
-          input:
-            qc_check_table = qc_check_table,
-            expected_taxon = expected_taxon,
-            gambit_predicted_taxon = gambit.gambit_predicted_taxon,
-            num_reads_raw1 = read_QC_trim.fastq_scan_raw1,
-            num_reads_raw2 = read_QC_trim.fastq_scan_raw2,
-            num_reads_clean1 = read_QC_trim.fastq_scan_clean1,
-            num_reads_clean2 = read_QC_trim.fastq_scan_clean2,
-            r1_mean_q_raw = cg_pipeline_raw.r1_mean_q,
-            r2_mean_q_raw = cg_pipeline_raw.r2_mean_q,
-            combined_mean_q_raw = cg_pipeline_raw.combined_mean_q,
-            r1_mean_readlength_raw = cg_pipeline_raw.r1_mean_readlength,
-            r2_mean_readlength_raw = cg_pipeline_raw.r2_mean_readlength,  
-            combined_mean_readlength_raw = cg_pipeline_raw.combined_mean_readlength,
-            r1_mean_q_clean = cg_pipeline_clean.r1_mean_q,
-            r2_mean_q_clean = cg_pipeline_clean.r2_mean_q,
-            combined_mean_q_clean = cg_pipeline_clean.combined_mean_q,
-            r1_mean_readlength_clean = cg_pipeline_clean.r1_mean_readlength,
-            r2_mean_readlength_clean = cg_pipeline_clean.r2_mean_readlength,  
-            combined_mean_readlength_clean = cg_pipeline_clean.combined_mean_readlength,    
-            est_coverage_raw = cg_pipeline_raw.est_coverage,
-            est_coverage_clean = cg_pipeline_clean.est_coverage,
-            midas_secondary_genus_abundance = read_QC_trim.midas_secondary_genus_abundance,
-            assembly_length = quast.genome_length,
-            number_contigs = quast.number_contigs,
-            n50_value = quast.n50_value,
-            quast_gc_percent = quast.gc_percent,
-            busco_results = busco.busco_results,
-            ani_highest_percent = ani.ani_highest_percent,
-            ani_highest_percent_bases_aligned = ani.ani_highest_percent_bases_aligned
-        }
-      }
+      # if(defined(qc_check_table)) {
+      #   call qc_check.qc_check_phb as qc_check_task {
+      #     input:
+      #       qc_check_table = qc_check_table,
+      #       expected_taxon = expected_taxon,
+      #       gambit_predicted_taxon = gambit.gambit_predicted_taxon,
+      #       num_reads_raw1 = read_QC_trim.fastq_scan_raw1,
+      #       num_reads_raw2 = read_QC_trim.fastq_scan_raw2,
+      #       num_reads_clean1 = read_QC_trim.fastq_scan_clean1,
+      #       num_reads_clean2 = read_QC_trim.fastq_scan_clean2,
+      #       r1_mean_q_raw = cg_pipeline_raw.r1_mean_q,
+      #       r2_mean_q_raw = cg_pipeline_raw.r2_mean_q,
+      #       combined_mean_q_raw = cg_pipeline_raw.combined_mean_q,
+      #       r1_mean_readlength_raw = cg_pipeline_raw.r1_mean_readlength,
+      #       r2_mean_readlength_raw = cg_pipeline_raw.r2_mean_readlength,  
+      #       combined_mean_readlength_raw = cg_pipeline_raw.combined_mean_readlength,
+      #       r1_mean_q_clean = cg_pipeline_clean.r1_mean_q,
+      #       r2_mean_q_clean = cg_pipeline_clean.r2_mean_q,
+      #       combined_mean_q_clean = cg_pipeline_clean.combined_mean_q,
+      #       r1_mean_readlength_clean = cg_pipeline_clean.r1_mean_readlength,
+      #       r2_mean_readlength_clean = cg_pipeline_clean.r2_mean_readlength,  
+      #       combined_mean_readlength_clean = cg_pipeline_clean.combined_mean_readlength,    
+      #       est_coverage_raw = cg_pipeline_raw.est_coverage,
+      #       est_coverage_clean = cg_pipeline_clean.est_coverage,
+      #       midas_secondary_genus_abundance = read_QC_trim.midas_secondary_genus_abundance,
+      #       assembly_length = quast.genome_length,
+      #       number_contigs = quast.number_contigs,
+      #       n50_value = quast.n50_value,
+      #       quast_gc_percent = quast.gc_percent,
+      #       busco_results = busco.busco_results,
+      #       ani_highest_percent = ani.ani_highest_percent,
+      #       ani_highest_percent_bases_aligned = ani.ani_highest_percent_bases_aligned
+      #   }
+      # }
   #call shovill.shovill_pe {
   #  input:
   #    samplename = samplename,
@@ -310,7 +310,44 @@ workflow theiaprok_illumina_pe_waphl {
         read2 = read_QC_trim.read2_clean
     }
   }
+  if(defined(qc_check_table)) {
+        call qc_check.qc_check_phb_waphl as qc_check_task_waphl {
+          input:
+            qc_check_table = qc_check_table,
+            expected_taxon = expected_taxon,
+            predicted_taxon = select_first([join_genus_species.genus_species, gambit.gambit_predicted_taxon, ""])
+            num_reads_raw1 = read_QC_trim.fastq_scan_raw1,
+            num_reads_raw2 = read_QC_trim.fastq_scan_raw2,
+            num_reads_clean1 = read_QC_trim.fastq_scan_clean1,
+            num_reads_clean2 = read_QC_trim.fastq_scan_clean2,
+            r1_mean_q_raw = cg_pipeline_raw.r1_mean_q,
+            r2_mean_q_raw = cg_pipeline_raw.r2_mean_q,
+            combined_mean_q_raw = cg_pipeline_raw.combined_mean_q,
+            r1_mean_readlength_raw = cg_pipeline_raw.r1_mean_readlength,
+            r2_mean_readlength_raw = cg_pipeline_raw.r2_mean_readlength,  
+            combined_mean_readlength_raw = cg_pipeline_raw.combined_mean_readlength,
+            r1_mean_q_clean = cg_pipeline_clean.r1_mean_q,
+            r2_mean_q_clean = cg_pipeline_clean.r2_mean_q,
+            combined_mean_q_clean = cg_pipeline_clean.combined_mean_q,
+            r1_mean_readlength_clean = cg_pipeline_clean.r1_mean_readlength,
+            r2_mean_readlength_clean = cg_pipeline_clean.r2_mean_readlength,  
+            combined_mean_readlength_clean = cg_pipeline_clean.combined_mean_readlength,    
+            est_coverage_raw = cg_pipeline_raw.est_coverage,
+            est_coverage_clean = cg_pipeline_clean.est_coverage,
+            midas_secondary_genus_abundance = read_QC_trim.midas_secondary_genus_abundance,
+            assembly_length = quast.genome_length,
+            number_contigs = quast.number_contigs,
+            n50_value = quast.n50_value,
+            quast_gc_percent = quast.gc_percent,
+            busco_results = busco.busco_results,
+            ani_highest_percent = ani.ani_highest_percent,
+            ani_highest_percent_bases_aligned = ani.ani_highest_percent_bases_aligned,
 
+            number_N general_qc.number_N,
+            number_Total = general_qc.number_Total,
+            kraken2_clean_human = kraken2_clean.percent_human
+        }
+  }
   call abricate.abricate as abricate_amr {
     input:
       assembly = shovill_pe.assembly_fasta,
@@ -541,8 +578,11 @@ workflow theiaprok_illumina_pe_waphl {
     String? plasmidfinder_docker = plasmidfinder.plasmidfinder_docker
     String? plasmidfinder_db_version = plasmidfinder.plasmidfinder_db_version
     # QC_Check Results
-    String? qc_check = qc_check_task.qc_check
-    File? qc_standard = qc_check_task.qc_standard
+    # String? qc_check = qc_check_task.qc_check
+    # File? qc_standard = qc_check_task.qc_standard
+    # QC_Check Results WAPHL
+    String? all_qc_check = qc_check_task_waphl.all_qc_check
+    File? all_qc_alert = qc_check_task_waphl.all_qc_alert
     # Ecoli Typing
     File? serotypefinder_report = merlin_magic.serotypefinder_report
     String? serotypefinder_docker = merlin_magic.serotypefinder_docker

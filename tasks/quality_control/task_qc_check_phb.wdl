@@ -416,3 +416,125 @@ task qc_check_phb {
     preemptible: 0
   }
 }
+
+task qc_check_phb_waphl {
+  input {
+    # core inputs
+    File? qc_check_table
+    String? expected_taxon
+    String? predicted_taxon
+    # workflow agnostic inputs
+    # Int? num_reads_raw1
+    # Int? num_reads_raw2
+    # Int? num_reads_clean1
+    # Int? num_reads_clean2
+    # theiaprok and theiaeuk inputs
+    # Float? r1_mean_q_raw
+    # Float? r2_mean_q_raw
+    Float? combined_mean_q_raw
+    # Float? r1_mean_readlength_raw
+    # Float? r2_mean_readlength_raw    
+    # Float? combined_mean_readlength_raw 
+    # Float? r1_mean_q_clean
+    # Float? r2_mean_q_clean
+    #Float? combined_mean_q_clean
+    # Float? r1_mean_readlength_clean
+    # Float? r2_mean_readlength_clean    
+    # Float? combined_mean_readlength_clean 
+    Float? est_coverage_raw
+    Float? est_coverage_clean 
+    #Int? assembly_length
+    # Int? number_contigs 
+    # Int? n50_value 
+    # Float? quast_gc_percent
+    String? busco_results
+    # theiaprok only inputs
+    # String? midas_secondary_genus_abundance 
+    # Float? ani_highest_percent 
+    # Float? ani_highest_percent_bases_aligned
+    # theiacov inputs
+    Float? kraken2_clean_human 
+    # Float? kraken_human_dehosted
+    # Float? kraken_sc2
+    # Float? kraken_sc2_dehosted
+    # Float? kraken_target_org
+    # Float? kraken_target_org_dehosted
+    # String? meanbaseq_trim
+    #Float? assembly_mean_coverage
+    Int? number_N
+    Int? number_Total
+    #Int? assembly_length_unambiguous
+    # Float? percent_reference_coverage
+    # Float? sc2_s_gene_mean_coverage
+    # Float? sc2_s_gene_percent_coverage
+    # String? vadr_num_alerts
+    # Int disk_size = 100
+  }
+  command <<<
+    python3 <<CODE
+    import csv
+      import pandas as pd
+      import numpy as np
+
+
+      qc_check = "no qc check for this taxa"
+      if "~{expected_taxon}" and "~{predicted_taxon}":
+        if "~{expected_taxon}" != "~{predicted_taxon}":
+          alert = "WARNING: expected taxon does not equal predicted taxon"
+
+
+      qc_check_df = pd.read_csv("~{qc_check_table}", sep = '\t', index_col = "taxon")
+      # verify that taxa has qc values associated with it
+      qc_check_taxa = qc_check_df.index.values.tolist()
+      #qc_check = "no qc check for this taxa"
+      if "~{predicted_taxon}" in qc_check_taxa:
+          qc_check = "PASS"
+
+          if "~{combined_mean_q_raw}" and qc_check:
+              if "~{combined_mean_q_raw}" < qc_check_df.loc["~{predicted_taxon}", "combined_mean_q_raw"]:
+                  qc_check = "FAIL"
+
+          if "~{busco_results}" and qc_check == "PASS":
+              if float("~{busco_results}"[2:].split("%")[0]) < float(qc_check_df.loc["~{predicted_taxon}", "busco_results"]):
+                  qc_check = "FAIL"
+
+          if "~{est_coverage_clean}" and qc_check == "PASS":
+              if "~{est_coverage_clean}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_clean"]:
+                  qc_check = "FAIL"
+
+          if "~{est_coverage_raw}" and qc_check == "PASS":
+              if "~{est_coverage_raw}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]:
+                  qc_check = "FAIL"
+          if "~{number_N}" and "~{number_Total}" and qc_check == "PASS":
+              perc_N = "~{number_N}"/"~{number_Total}"
+              if perc_N >= qc_check_df.loc["~{predicted_taxon}", "perc_N"]:
+                  qc_check = "FAIL"
+
+          if "~{kraken2_clean_human}" and qc_check == "PASS":
+              if "~{kraken2_clean_human}" >= qc_check_df.loc["~{predicted_taxon}", "kraken2_clean_human"]:
+                  qc_check = "FAIL"
+
+
+      with open("ALL_QC_CHECK", 'wt') as out:
+        out.write(qc_check)
+
+      with open("ALL_QC_ALERT", 'wt') as out:
+        out.write(alert)
+      
+    CODE
+
+  >>>
+  output {
+    String all_qc_check = read_string("ALL_QC_CHECK")
+    String all_qc_alert = read_string("ALL_QC_ALERT")
+  }
+  runtime {
+    docker: "us-docker.pkg.dev/general-theiagen/theiagen/terra-tools:2023-03-16"
+    memory: "8 GB"
+    cpu: 4
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
+   # maxRetries: 3
+    preemptible: 0
+  }
+}
