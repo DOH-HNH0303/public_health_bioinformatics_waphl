@@ -315,7 +315,7 @@ workflow theiaprok_illumina_pe_waphl {
           input:
             qc_check_table = qc_check_table,
             expected_taxon = expected_taxon,
-            predicted_taxon = select_first([join_genus_species.genus_species, gambit.gambit_predicted_taxon, ""])
+            predicted_taxon = select_first([join_genus_species.genus_species, gambit.gambit_predicted_taxon, ""]),
             num_reads_raw1 = read_QC_trim.fastq_scan_raw1,
             num_reads_raw2 = read_QC_trim.fastq_scan_raw2,
             num_reads_clean1 = read_QC_trim.fastq_scan_clean1,
@@ -342,7 +342,6 @@ workflow theiaprok_illumina_pe_waphl {
             busco_results = busco.busco_results,
             ani_highest_percent = ani.ani_highest_percent,
             ani_highest_percent_bases_aligned = ani.ani_highest_percent_bases_aligned,
-
             number_N general_qc.number_N,
             number_Total = general_qc.number_Total,
             kraken2_clean_human = kraken2_clean.percent_human
@@ -582,7 +581,7 @@ workflow theiaprok_illumina_pe_waphl {
     # File? qc_standard = qc_check_task.qc_standard
     # QC_Check Results WAPHL
     String? all_qc_check = qc_check_task_waphl.all_qc_check
-    File? all_qc_alert = qc_check_task_waphl.all_qc_alert
+    String? all_qc_alert = qc_check_task_waphl.all_qc_alert
     # Ecoli Typing
     File? serotypefinder_report = merlin_magic.serotypefinder_report
     String? serotypefinder_docker = merlin_magic.serotypefinder_docker
