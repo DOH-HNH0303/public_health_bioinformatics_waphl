@@ -342,7 +342,7 @@ workflow theiaprok_illumina_pe_waphl {
             busco_results = busco.busco_results,
             ani_highest_percent = ani.ani_highest_percent,
             ani_highest_percent_bases_aligned = ani.ani_highest_percent_bases_aligned,
-            number_N general_qc.number_N,
+            number_N = general_qc.number_N,
             number_Total = general_qc.number_Total,
             kraken2_clean_human = kraken2_clean.percent_human
         }
