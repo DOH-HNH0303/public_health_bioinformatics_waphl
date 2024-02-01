@@ -491,7 +491,7 @@ task qc_check_phb_waphl {
         qc_check = "PASS"
 
         if "~{combined_mean_q_raw}" and qc_check:
-            if "~{combined_mean_q_raw}" < qc_check_df.loc["~{predicted_taxon}", "combined_mean_q_raw"]:
+            if float("~{combined_mean_q_raw}") < float(qc_check_df.loc["~{predicted_taxon}", "combined_mean_q_raw"]):
                 qc_check = "FAIL"
 
         if "~{busco_results}" and qc_check == "PASS":
