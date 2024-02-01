@@ -473,53 +473,53 @@ task qc_check_phb_waphl {
   command <<<
     python3 <<CODE
     import csv
-      import pandas as pd
-      import numpy as np
+    import pandas as pd
+    import numpy as np
 
 
-      qc_check = "no qc check for this taxa"
-      if "~{expected_taxon}" and "~{predicted_taxon}":
-        if "~{expected_taxon}" != "~{predicted_taxon}":
-          alert = "WARNING: expected taxon does not equal predicted taxon"
+    qc_check = "no qc check for this taxa"
+    if "~{expected_taxon}" and "~{predicted_taxon}":
+      if "~{expected_taxon}" != "~{predicted_taxon}":
+        alert = "WARNING: expected taxon does not equal predicted taxon"
 
 
-      qc_check_df = pd.read_csv("~{qc_check_table}", sep = '\t', index_col = "taxon")
-      # verify that taxa has qc values associated with it
-      qc_check_taxa = qc_check_df.index.values.tolist()
-      #qc_check = "no qc check for this taxa"
-      if "~{predicted_taxon}" in qc_check_taxa:
-          qc_check = "PASS"
+    qc_check_df = pd.read_csv("~{qc_check_table}", sep = '\t', index_col = "taxon")
+    # verify that taxa has qc values associated with it
+    qc_check_taxa = qc_check_df.index.values.tolist()
+    #qc_check = "no qc check for this taxa"
+    if "~{predicted_taxon}" in qc_check_taxa:
+        qc_check = "PASS"
 
-          if "~{combined_mean_q_raw}" and qc_check:
-              if "~{combined_mean_q_raw}" < qc_check_df.loc["~{predicted_taxon}", "combined_mean_q_raw"]:
-                  qc_check = "FAIL"
+        if "~{combined_mean_q_raw}" and qc_check:
+            if "~{combined_mean_q_raw}" < qc_check_df.loc["~{predicted_taxon}", "combined_mean_q_raw"]:
+                qc_check = "FAIL"
 
-          if "~{busco_results}" and qc_check == "PASS":
-              if float("~{busco_results}"[2:].split("%")[0]) < float(qc_check_df.loc["~{predicted_taxon}", "busco_results"]):
-                  qc_check = "FAIL"
+        if "~{busco_results}" and qc_check == "PASS":
+            if float("~{busco_results}"[2:].split("%")[0]) < float(qc_check_df.loc["~{predicted_taxon}", "busco_results"]):
+                qc_check = "FAIL"
 
-          if "~{est_coverage_clean}" and qc_check == "PASS":
-              if "~{est_coverage_clean}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_clean"]:
-                  qc_check = "FAIL"
+        if "~{est_coverage_clean}" and qc_check == "PASS":
+            if "~{est_coverage_clean}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_clean"]:
+                qc_check = "FAIL"
 
-          if "~{est_coverage_raw}" and qc_check == "PASS":
-              if "~{est_coverage_raw}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]:
-                  qc_check = "FAIL"
-          if "~{number_N}" and "~{number_Total}" and qc_check == "PASS":
-              perc_N = "~{number_N}"/"~{number_Total}"
-              if perc_N >= qc_check_df.loc["~{predicted_taxon}", "perc_N"]:
-                  qc_check = "FAIL"
+        if "~{est_coverage_raw}" and qc_check == "PASS":
+            if "~{est_coverage_raw}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]:
+                qc_check = "FAIL"
+        if "~{number_N}" and "~{number_Total}" and qc_check == "PASS":
+            perc_N = "~{number_N}"/"~{number_Total}"
+            if perc_N >= qc_check_df.loc["~{predicted_taxon}", "perc_N"]:
+                qc_check = "FAIL"
 
-          if "~{kraken2_clean_human}" and qc_check == "PASS":
-              if "~{kraken2_clean_human}" >= qc_check_df.loc["~{predicted_taxon}", "kraken2_clean_human"]:
-                  qc_check = "FAIL"
+        if "~{kraken2_clean_human}" and qc_check == "PASS":
+            if "~{kraken2_clean_human}" >= qc_check_df.loc["~{predicted_taxon}", "kraken2_clean_human"]:
+                qc_check = "FAIL"
 
 
-      with open("ALL_QC_CHECK", 'wt') as out:
-        out.write(qc_check)
+    with open("ALL_QC_CHECK", 'wt') as out:
+      out.write(qc_check)
 
-      with open("ALL_QC_ALERT", 'wt') as out:
-        out.write(alert)
+    with open("ALL_QC_ALERT", 'wt') as out:
+      out.write(alert)
       
     CODE
 
