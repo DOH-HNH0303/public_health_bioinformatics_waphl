@@ -499,19 +499,19 @@ task qc_check_phb_waphl {
                 qc_check = "FAIL"
 
         if "~{est_coverage_clean}" and qc_check == "PASS":
-            if "~{est_coverage_clean}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_clean"]:
+            if float("~{est_coverage_clean}") < float(qc_check_df.loc["~{predicted_taxon}", "est_coverage_clean"]):
                 qc_check = "FAIL"
 
         if "~{est_coverage_raw}" and qc_check == "PASS":
-            if "~{est_coverage_raw}" < qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]:
+            if float("~{est_coverage_raw}") < float(qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]):
                 qc_check = "FAIL"
         if "~{number_N}" and "~{number_Total}" and qc_check == "PASS":
-            perc_N = "~{number_N}"/"~{number_Total}"
-            if perc_N >= qc_check_df.loc["~{predicted_taxon}", "perc_N"]:
+            perc_N = int("~{number_N}")/int("~{number_Total}")
+            if perc_N >= float(qc_check_df.loc["~{predicted_taxon}", "perc_N"]):
                 qc_check = "FAIL"
 
         if "~{kraken2_clean_human}" and qc_check == "PASS":
-            if "~{kraken2_clean_human}" >= qc_check_df.loc["~{predicted_taxon}", "kraken2_clean_human"]:
+            if float("~{kraken2_clean_human}") >= float(qc_check_df.loc["~{predicted_taxon}", "kraken2_clean_human"]):
                 qc_check = "FAIL"
 
 
