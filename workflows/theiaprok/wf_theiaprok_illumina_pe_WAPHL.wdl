@@ -315,7 +315,7 @@ workflow theiaprok_illumina_pe_waphl {
           input:
             qc_check_table = qc_check_table,
             expected_taxon = expected_taxon,
-            predicted_taxon = select_first([join_genus_species.genus_species, gambit.gambit_predicted_taxon, ""]),
+            predicted_taxon = select_first([fastANI.fastani_genus, gambit.gambit_predicted_taxon, ""]),
             # num_reads_raw1 = read_QC_trim.fastq_scan_raw1,
             # num_reads_raw2 = read_QC_trim.fastq_scan_raw2,
             # num_reads_clean1 = read_QC_trim.fastq_scan_clean1,
