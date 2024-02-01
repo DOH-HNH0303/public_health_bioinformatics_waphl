@@ -618,8 +618,8 @@ workflow theiaprok_illumina_pe_waphl {
     # String? qc_check = qc_check_task.qc_check
     # File? qc_standard = qc_check_task.qc_standard
     # QC_Check Results WAPHL
-    String? aa_qc_check = select_first([qc_check_task_ltc.all_qc_check, qc_check_task_other.all_qc_check)]
-    String? aa_qc_alert = select_first([qc_check_task_ltc.all_qc_alert, qc_check_task_other.all_qc_alert)]
+    String? aa_qc_check = select_first([qc_check_task_ltc.all_qc_check, qc_check_task_other.all_qc_check])
+    String? aa_qc_alert = select_first([qc_check_task_ltc.all_qc_alert, qc_check_task_other.all_qc_alert])
     # Ecoli Typing
     File? serotypefinder_report = merlin_magic.serotypefinder_report
     String? serotypefinder_docker = merlin_magic.serotypefinder_docker
