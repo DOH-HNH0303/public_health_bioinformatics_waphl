@@ -468,7 +468,7 @@ task qc_check_phb_waphl {
     # Float? sc2_s_gene_mean_coverage
     # Float? sc2_s_gene_percent_coverage
     # String? vadr_num_alerts
-     Int disk_size = 100
+    Int disk_size = 100
   }
   command <<<
     python3 <<CODE
