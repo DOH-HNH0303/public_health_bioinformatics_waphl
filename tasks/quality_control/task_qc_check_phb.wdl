@@ -536,5 +536,6 @@ task qc_check_phb_waphl {
     disk: disk_size + " GB"
    # maxRetries: 3
     preemptible: 0
+    continueOnReturnCode: "True"
   }
 }
