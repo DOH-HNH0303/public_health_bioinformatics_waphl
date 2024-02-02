@@ -476,7 +476,8 @@ task qc_check_phb_waphl {
     import pandas as pd
     import numpy as np
 
-
+    
+    alert = ""
     qc_check = "no qc check for this taxa"
     if "~{expected_taxon}" and "~{predicted_taxon}":
       if "~{expected_taxon}" != "~{predicted_taxon}":
@@ -505,7 +506,7 @@ task qc_check_phb_waphl {
         if "~{est_coverage_raw}" and qc_check == "PASS":
             if float("~{est_coverage_raw}") < float(qc_check_df.loc["~{predicted_taxon}", "est_coverage_raw"]):
                 qc_check = "FAIL"
-                
+
         if "~{number_N}" and "~{number_Total}" and qc_check == "PASS":
             perc_N = int("~{number_N}")/int("~{number_Total}")
             if perc_N >= float(qc_check_df.loc["~{predicted_taxon}", "perc_N"]):
