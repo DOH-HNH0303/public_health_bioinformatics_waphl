@@ -582,6 +582,9 @@ workflow theiaprok_illumina_pe_waphl {
     # QC_Check Results WAPHL
     String? aa_qc_check = qc_check_task_waphl.all_qc_check
     String? aa_qc_alert = qc_check_task_waphl.all_qc_alert
+    
+    # Taxa call for poppunk
+    String predicted_taxon = select_first([fastANI.fastani_genus, gambit.gambit_predicted_taxon, ""])
     # Ecoli Typing
     File? serotypefinder_report = merlin_magic.serotypefinder_report
     String? serotypefinder_docker = merlin_magic.serotypefinder_docker
