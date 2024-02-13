@@ -17,7 +17,7 @@ workflow recomb_aware_phylo_analysis {
     Array[String] samplename
     File? reference_genome
     String cluster_name
-    Array[String]? declared_cluster
+    Array[Int]? declared_cluster
     Boolean only_clade_analysis = false
     # String terra_workspace
     #String terra_project
