@@ -295,6 +295,7 @@ task scatter_by_clade {
 
 
     clust=~{sep=' ' unique_clusters}
+    echo $clust
 
     if [[ -v $clust ]]
     then
