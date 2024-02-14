@@ -230,8 +230,9 @@ task split_by_declared_cluster {
     cluster_list = "~{sep=' ' declared_cluster}".split(" ")
     seqs = "~{sep=' ' samplename}".split(" ")
     out = "~{cluster_name}_output.txt"
+    clust_out = "~{cluster_name}_clusters.txt"
 
-
+    
     clust_dict = {}
     for i in range(len(seqs)):
         if not cluster_list[i]:
@@ -252,12 +253,19 @@ task split_by_declared_cluster {
             fp.write("\n")
         print('Done')
 
+    with open(clust_out, 'w') as fp:
+        for li in clust_dict.keys():
+            fp.write("%s\n" % item)
+            #fp.write("\n")
+        print('Done')
+
     CODE
   >>>
   output {
     String date = read_string("DATE")
     File clade_list_file = "~{cluster_name}_output.txt"
     Array[Array[String]] clade_list = read_tsv("~{cluster_name}_output.txt")
+    Array[Array[String]] unique_clusters = read_tsv("~{cluster_name}_clusters.txt")
     String split_cluster_docker_image = docker
   }
   runtime {

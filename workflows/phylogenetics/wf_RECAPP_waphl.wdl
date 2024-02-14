@@ -94,13 +94,13 @@ if (defined(declared_cluster)) {
 }
 }
 
-scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]), range(length(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]))))) {
+scatter (pair in zip(select_first([split_by_declared_cluster.clade_list, split_by_clade.clade_list]), select_first([split_by_declared_cluster.unique_clusters, range(length(split_by_clade.clade_list))]))) {
 if (length(select_all(pair.left)) >= 3){
 call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
     cluster_name = cluster_name,
-    assembly_files = assembly_gff
+    assembly_files = assembly_gff,
 }
 
 call clade_analysis.clade_analysis as clade_analysis  {
