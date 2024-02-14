@@ -100,7 +100,7 @@ call utilities.scatter_by_clade as scatter_by_clade  {
   input:
     clade_list = pair.left,
     cluster_name = cluster_name,
-    assembly_files = assembly_gff,
+    assembly_files = assembly_gff
 }
 
 call clade_analysis.clade_analysis as clade_analysis  {
