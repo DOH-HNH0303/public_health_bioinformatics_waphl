@@ -273,6 +273,7 @@ task split_by_declared_cluster {
     cpu: 4
     disks: "local-disk 100 SSD"
     preemptible: 0
+    continueOnReturnCode: [0, 1]
   }
 }
 
