@@ -151,7 +151,7 @@ task split_by_clade {
   }
   command <<<
     # date and version control
-    date | tee DATE
+    date | scatter DATE
     python3<<CODE
 
     import pandas as pd
@@ -220,7 +220,7 @@ task split_by_declared_cluster {
   }
   command <<<
     # date and version control
-    date | tee DATE
+    date | scatter DATE
     python3<<CODE
 
     import pandas as pd
@@ -285,10 +285,20 @@ task scatter_by_clade {
     String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
     Int threads = 6
     Array[String] clade_list
+    Array[Int]?  unique_clusters
+    Int clust_idx
   }
   command <<<
     date | tee DATE
     mkdir files_dir
+
+
+    if [[ -v name_of_var ]]
+    then
+    clust = ~{sep=' ' unique_clusters}
+    echo ${clust[${clust_idx}]} | tee CLUSTER
+    fi
+
     for x in ~{sep=' ' assembly_files}
     do
         mv "${x}" ./$(basename "${x}")
@@ -345,6 +355,7 @@ task scatter_by_clade {
   >>>
   output {
     String date = read_string("DATE")
+    String cluster = read_string("CLUSTER")
     Array[File] clade_files = glob("files_dir/*")
     Array[String] samplename = read_lines("file_list.txt")
     String scatter_clade_docker_image = docker
@@ -368,7 +379,7 @@ task choose_clade_filter {
     # Data sorting step go to get around terra issue
 
 
-    date | tee DATE
+    date | scatter DATE
     mkdir files_dir
     for x in ~{sep=' ' clade_list}
     do
@@ -397,7 +408,7 @@ task generate_none {
 
   }
   command <<<
-    date | tee DATE
+    date | scatter DATE
     touch none.txt
   >>>
   output {
@@ -425,7 +436,7 @@ task concat_fastq {
 
   }
   command <<<
-    date | tee DATE
+    date | scatter DATE
     cat ~{read1_cleaned} ~{read2_cleaned}>~{samplename}_total_reads.fastq
   >>>
   output {
@@ -450,9 +461,9 @@ task run_note {
 
   }
   command <<<
-    date | tee DATE
+    date | scatter DATE
     touch none.txt
-    echo "~{note}" | tee PIPELINE_NOTE
+    echo "~{note}" | scatter PIPELINE_NOTE
   >>>
   output {
     String date = read_string("DATE")
