@@ -298,7 +298,8 @@ task scatter_by_clade {
     echo ${clust[${clust_idx}]}
     echo $clust
 
-    if [[ -v $clust ]]
+    if [ -n "$clust" ]
+    #if [[ -v $clust ]]
     then
     echo ${clust[${clust_idx}]} | tee CLUSTER
     fi
