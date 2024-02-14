@@ -151,7 +151,7 @@ task split_by_clade {
   }
   command <<<
     # date and version control
-    date | scatter DATE
+    date | tee DATE
     python3<<CODE
 
     import pandas as pd
@@ -384,7 +384,7 @@ task choose_clade_filter {
     # Data sorting step go to get around terra issue
 
 
-    date | scatter DATE
+    date | tee DATE
     mkdir files_dir
     for x in ~{sep=' ' clade_list}
     do
@@ -413,7 +413,7 @@ task generate_none {
 
   }
   command <<<
-    date | scatter DATE
+    date | tee DATE
     touch none.txt
   >>>
   output {
@@ -441,7 +441,7 @@ task concat_fastq {
 
   }
   command <<<
-    date | scatter DATE
+    date | tee DATE
     cat ~{read1_cleaned} ~{read2_cleaned}>~{samplename}_total_reads.fastq
   >>>
   output {
@@ -466,9 +466,9 @@ task run_note {
 
   }
   command <<<
-    date | scatter DATE
+    date | tee DATE
     touch none.txt
-    echo "~{note}" | scatter PIPELINE_NOTE
+    echo "~{note}" | tee PIPELINE_NOTE
   >>>
   output {
     String date = read_string("DATE")
