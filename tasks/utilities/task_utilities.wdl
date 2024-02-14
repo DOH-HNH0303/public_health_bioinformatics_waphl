@@ -293,9 +293,11 @@ task scatter_by_clade {
     mkdir files_dir
 
 
-    if [[ -v ~{sep=' ' unique_clusters} ]]
+
+    clust=~{sep=' ' unique_clusters}
+
+    if [[ -v $clust ]]
     then
-    clust = ~{sep=' ' unique_clusters}
     echo ${clust[${clust_idx}]} | tee CLUSTER
     fi
 
