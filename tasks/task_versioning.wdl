@@ -73,8 +73,8 @@ task waphl_version_capture {
 
     with open("input.tsv", "r") as file1, \
      open('versions.tsv', mode='w') as out_file:
-        tool_list = ["utilities"]
-        version_list = ["1.1"]
+        tool_list = ["pipeline_version", "utilities"]
+        version_list = ["~{version}", "1.1"]
         for line in file1:
           for l in line.split(" "):
             l=l.split(":")
