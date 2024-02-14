@@ -220,7 +220,7 @@ task split_by_declared_cluster {
   }
   command <<<
     # date and version control
-    date | scatter DATE
+    date | Tee DATE
     python3<<CODE
 
     import pandas as pd
