@@ -264,7 +264,7 @@ task split_by_declared_cluster {
     String date = read_string("DATE")
     File clade_list_file = "~{cluster_name}_output.txt"
     Array[Array[String]] clade_list = read_tsv("~{cluster_name}_output.txt")
-    Array[String] unique_clusters = read_tsv("~{cluster_name}_clusters.txt")
+    Array[String] unique_clusters = read_lines("~{cluster_name}_clusters.txt")
     String split_cluster_docker_image = docker
   }
   runtime {
