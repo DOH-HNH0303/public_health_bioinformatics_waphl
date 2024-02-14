@@ -285,7 +285,7 @@ task scatter_by_clade {
     String docker = "quay.io/broadinstitute/py3-bio:0.1.2"
     Int threads = 6
     Array[String] clade_list
-    Array[Int]?  unique_clusters
+    Array[String]?  unique_clusters
     Int clust_idx
   }
   command <<<
