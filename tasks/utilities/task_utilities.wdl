@@ -255,7 +255,7 @@ task split_by_declared_cluster {
 
     with open(clust_out, 'w') as fp:
         for li in clust_dict.keys():
-            fp.write("%s\n" % item)
+            fp.write("%s\n" % li)
             #fp.write("\n")
         print('Done')
 
