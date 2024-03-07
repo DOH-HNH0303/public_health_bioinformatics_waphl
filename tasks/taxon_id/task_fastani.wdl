@@ -34,7 +34,7 @@ task fastANI {
   }
 
   runtime {
-    docker:       "hnh0303/fastani:1.33-legionella_corynebacterium"
+    docker:       "hnh0303/fastani:1.34-legionella_corynebacterium"
     memory:       "16 GB"
     cpu:          4
     disks:        "local-disk 100 SSD"
