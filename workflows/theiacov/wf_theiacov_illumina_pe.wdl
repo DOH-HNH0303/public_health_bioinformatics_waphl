@@ -403,6 +403,7 @@ workflow theiacov_illumina_pe {
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
+    String? vadr_flag = vadr.vadr_flag
     # Flu IRMA and Abricate Outputs
     String? irma_version = irma.irma_version
     String? irma_type = irma.irma_type

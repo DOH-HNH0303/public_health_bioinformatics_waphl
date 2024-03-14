@@ -46,9 +46,20 @@ task vadr {
       # prep alerts into a tsv file for parsing
       cut -f 5 "~{out_base}/~{out_base}.vadr.alt.list" | tail -n +2 > "~{out_base}.vadr.alerts.tsv"
       cat "~{out_base}.vadr.alerts.tsv" | wc -l > NUM_ALERTS
+      
+      # create flag for manual curation
+      vadr_test=$(cat "~{out_base}/~{out_base}.vadr.alt" | grep "nmiscftr" | grep  "ORF3a\|ORF6\|ORF7a\|ORF7b\|ORF8\|ORF10" | wc -l)
+      echo $vadr_test
+      if [ "$vadr_test" -gt 2 ]; then 
+      echo "FLAGGED" | tee VADR_FLAG
+      else
+        echo "PASS" | tee VADR_FLAG
+      fi
 
+    
     else
       echo "VADR skipped due to poor assembly; assembly length (unambiguous) = ~{assembly_length_unambiguous}" > NUM_ALERTS
+      touch VADR_FLAG
     fi
 
   >>>
@@ -58,6 +69,7 @@ task vadr {
     File? alerts_list = "~{out_base}/~{out_base}.vadr.alt.list"
     File? outputs_tgz = "~{out_base}.vadr.tar.gz"
     File? vadr_fastas_zip_archive = "~{out_base}_vadr-fasta-files.zip"
+    String? vadr_flag = read_string("VADR_FLAG")
     String vadr_docker = docker
   }
   runtime {
@@ -66,5 +78,6 @@ task vadr {
     cpu: cpu
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
+    continueOnReturnCode: "True"
   }
 }
