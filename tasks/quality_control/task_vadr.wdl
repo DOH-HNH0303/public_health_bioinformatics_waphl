@@ -9,10 +9,12 @@ task vadr {
     String vadr_opts = "--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn --out_allfasta"
     Int assembly_length_unambiguous
     Int skip_length = 10000
-    String docker = "us-docker.pkg.dev/general-theiagen/staphb/vadr:1.5.1"
-    Int minlen = 50
-    Int maxlen = 30000
+    String docker = "us-docker.pkg.dev/general-theiagen/staphb/vadr:1.6.3"
+    Int min_length = 50
+    Int max_length = 30000
     Int cpu = 2
+    Int memory = 8
+    Int disk_size = 100
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
@@ -23,8 +25,8 @@ task vadr {
       # remove terminal ambiguous nucleotides
       /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
         "~{genome_fasta}" \
-        --minlen ~{minlen} \
-        --maxlen ~{maxlen} \
+        --minlen ~{min_length} \
+        --maxlen ~{max_length} \
         > "~{out_base}_trimmed.fasta"
 
       # run VADR
@@ -74,7 +76,9 @@ task vadr {
   }
   runtime {
     docker: "~{docker}"
-    memory: "8 GB"
+    memory: memory + " GB"
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     cpu: cpu
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
