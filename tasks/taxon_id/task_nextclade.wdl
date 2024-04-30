@@ -6,47 +6,54 @@ task nextclade {
     }
     input {
       File genome_fasta
-      File? root_sequence
       File? auspice_reference_tree_json
-      File? qc_config_json
       File? gene_annotations_gff
-      File? pcr_primers_csv
-      File? virus_properties
-      String docker = "us-docker.pkg.dev/general-theiagen/nextstrain/nextclade:2.14.0"
+      File? nextclade_pathogen_json
+      File? input_ref
+      String docker = "us-docker.pkg.dev/general-theiagen/nextstrain/nextclade:3.3.1" 
       String dataset_name
-      String dataset_reference
+      String verbosity = "warn" # other options are: "off" "error" "info" "debug" and "trace"
       String dataset_tag
       Int disk_size = 50
+      Int memory = 4
+      Int cpu = 2
     }
     String basename = basename(genome_fasta, ".fasta")
     command <<<
         NEXTCLADE_VERSION="$(nextclade --version)"
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
-        nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
+        # --reference no longer used in v3. consolidated into --name and --tag
+        nextclade dataset get \
+          --name="~{dataset_name}" \
+          --tag="~{dataset_tag}" \
+          -o nextclade_dataset_dir \
+          --verbosity ~{verbosity}
+
+        # exit script/task upon error
         set -e
+
         nextclade run \
-            --input-dataset=nextclade_dataset_dir/ \
-            ~{"--input-root-seq " + root_sequence} \
-            ~{"--input-tree " + auspice_reference_tree_json} \
-            ~{"--input-qc-config " + qc_config_json} \
-            ~{"--input-gene-map " + gene_annotations_gff} \
-            ~{"--input-pcr-primers " + pcr_primers_csv} \
-            ~{"--input-virus-properties " + virus_properties}  \
-            --output-json "~{basename}".nextclade.json \
-            --output-tsv  "~{basename}".nextclade.tsv \
-            --output-tree "~{basename}".nextclade.auspice.json \
-            --output-all=. \
-            "~{genome_fasta}"
+          --input-dataset nextclade_dataset_dir/ \
+          ~{"--input-ref " + input_ref} \
+          ~{"--input-tree " + auspice_reference_tree_json} \
+          ~{"--input-pathogen-json " + nextclade_pathogen_json} \
+          ~{"--input-annotation " + gene_annotations_gff} \
+          --output-json "~{basename}".nextclade.json \
+          --output-tsv  "~{basename}".nextclade.tsv \
+          --output-tree "~{basename}".nextclade.auspice.json \
+          --output-all . \
+          --verbosity ~{verbosity} \
+          "~{genome_fasta}"
     >>>
     runtime {
       docker: "~{docker}"
-      memory: "4 GB"
-      cpu: 2
+      memory: "~{memory} GB"
+      cpu: cpu
       disks:  "local-disk " + disk_size + " SSD"
       disk: disk_size + " GB" # TES
       dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 3 
+      maxRetries: 3  
     }
     output {
       String nextclade_version = read_string("NEXTCLADE_VERSION")
@@ -119,12 +126,6 @@ task nextclade_output_parser {
           nc_aa_subs = tsv_dict['aaSubstitutions']
           if nc_aa_subs == '':
             nc_aa_subs = 'NA'
-          else:
-            # if organism is flu, return list of aa subs associated with tamiflu resistance
-            if ("~{organism}" == "flu" and "~{NA_segment}" == "true"):
-              tamiflu_subs = intersection(tamiflu_aa_subs, nc_aa_subs.split(','))
-              with codecs.open("TAMIFLU_AASUBS", 'wt') as Tamiflu_AA_Subs:
-                Tamiflu_AA_Subs.write(",".join(tamiflu_subs))
           Nextclade_AA_Subs.write(nc_aa_subs)
 
         with codecs.open("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
@@ -165,7 +166,7 @@ task nextclade_output_parser {
     output {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
       String nextclade_aa_subs = read_string("NEXTCLADE_AASUBS")
-      String nextclade_tamiflu_aa_subs = read_string("TAMIFLU_AASUBS")
+      #String nextclade_tamiflu_aa_subs = read_string("TAMIFLU_AASUBS")
       String nextclade_aa_dels = read_string("NEXTCLADE_AADELS")
       String nextclade_lineage = read_string("NEXTCLADE_LINEAGE")
       String nextclade_qc = read_string("NEXTCLADE_QC")
