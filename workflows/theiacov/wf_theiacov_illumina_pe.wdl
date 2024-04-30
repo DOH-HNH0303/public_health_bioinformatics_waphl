@@ -182,7 +182,7 @@ workflow theiacov_illumina_pe {
             docker = nextclade_docker_image,
             genome_fasta = select_first([ivar_consensus.assembly_fasta, irma.seg_ha_assembly]),
             dataset_name = select_first([abricate_flu.nextclade_name_ha, nextclade_dataset_name, organism]),
-            dataset_reference = select_first([abricate_flu.nextclade_ref_ha, nextclade_dataset_reference]),
+            #dataset_reference = select_first([abricate_flu.nextclade_ref_ha, nextclade_dataset_reference]),
             dataset_tag = select_first([abricate_flu.nextclade_ds_tag_ha, nextclade_dataset_tag])
         }
         call nextclade_task.nextclade_output_parser {
@@ -198,7 +198,7 @@ workflow theiacov_illumina_pe {
             docker = nextclade_docker_image,
             genome_fasta = select_first([irma.seg_na_assembly]),
             dataset_name = select_first([abricate_flu.nextclade_name_na, nextclade_dataset_name, organism]),
-            dataset_reference = select_first([abricate_flu.nextclade_ref_na, nextclade_dataset_reference]),
+            #dataset_reference = select_first([abricate_flu.nextclade_ref_na, nextclade_dataset_reference]),
             dataset_tag = select_first([abricate_flu.nextclade_ds_tag_na, nextclade_dataset_tag])
         }
         call nextclade_task.nextclade_output_parser as nextclade_output_parser_flu_na {
