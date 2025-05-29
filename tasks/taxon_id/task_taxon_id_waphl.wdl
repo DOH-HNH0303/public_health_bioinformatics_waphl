@@ -490,6 +490,7 @@ task kraken2 {
     File? read2
     String samplename
     String? kraken2_db = "../kraken2_db"
+    String docker = "hnh0303/kraken2:2.1.2-custom_db_23062022_pandas"
     Int? cpu = 4
   }
   command <<<
@@ -527,7 +528,7 @@ task kraken2 {
     String kraken2_strain = read_string("TOPSTRAIN")
   }
   runtime {
-    docker: "hnh0303/kraken2:2.1.2-custom_db_23062022_pandas"
+    docker: "~{docker}"
     memory: "16 GB"
     cpu: cpu
     disks: "local-disk 100 SSD"
