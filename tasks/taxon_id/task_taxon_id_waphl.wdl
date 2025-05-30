@@ -602,6 +602,42 @@ task kraken2 {
       mv "~{samplename}.unclassified#.fastq.gz" ~{samplename}.unclassified_1.fastq.gz
     fi
 
+    # Find Top Species and Genus
+    top_species_line=$(awk -F'\t' '
+      $4=="S" {
+        if (!max || $1+0 > max) { max=$1+0; line=$0 }
+      }
+      END { print line }
+    ' "~{samplename}.report.txt")
+
+    top_species=$(echo "$top_species_line" | awk -F'\t' '{ gsub(/^ +| +$/,"", $6); print $6 }')
+
+    # Extract genus (first word) and species (second word)
+    genus=$(echo "$top_species" | awk '{print $1}')
+    if [ -z "$genus" ] ; then genus="None" ; fi
+    echo "$genus" | tee TOPGENUS
+
+    species=$(echo "$top_species" | awk '{print $2}')
+    if [ -z "$species" ] ; then species="None" ; fi
+    echo "$species" | tee TOPSPECIES
+
+    # Find top strain
+    strain_line=$(awk -F'\t' -v sp="$species" '
+      $4=="S1" && $6 ~ sp {
+        if (!max || $1+0 > max) { max=$1+0; line=$0 }
+      }
+      END { print line }
+    ' "~{samplename}.report.txt")
+
+    if [ -z "$strain_line" ]; then 
+        top_strain="None"
+    else
+        strain_full=$(echo "$strain_line" | awk -F'\t' '{ gsub(/^ +| +$/,"", $6); print $6 }')
+        # Remove the first two words to get the strain description.
+        top_strain=$(echo "$strain_full" | cut -d " " -f3-)
+    fi
+    if [ -z "$top_strain" ] ; then top_strain="None" ; fi
+    echo "$top_strain" | tee TOPSTRAIN
   >>>
   output {
     String version = read_string("VERSION")
