@@ -484,7 +484,7 @@ task midas {
   }
 }
 
-task kraken2 {
+task kraken2_old {
   input {
     File read1
     File? read2
@@ -539,11 +539,11 @@ task kraken2 {
 }
 
 
-task kraken2_standalone {
+task kraken2 {
   input {
     File read1
     File? read2
-    File kraken2_db
+    File kraken2_db = "gs://theiagen-large-public-files-rp/terra/databases/kraken2/k2_standard_08gb_20240112.tar.gz"
     String samplename
     String docker = "us-docker.pkg.dev/general-theiagen/staphb/kraken2:2.1.2-no-db"
     String kraken2_args = ""
@@ -604,10 +604,10 @@ task kraken2_standalone {
 
   >>>
   output {
-    String kraken2_version = read_string("VERSION")
+    String version = read_string("VERSION")
     String kraken2_docker = docker
-    String analysis_date = read_string("DATE")
-    File kraken2_report = "~{samplename}.report.txt"
+    String date = read_string("DATE")
+    File kraken_report = "~{samplename}.report.txt"
     File kraken2_classified_report = "~{samplename}.classifiedreads.txt.gz"
     File kraken2_unclassified_read1 = "~{samplename}.unclassified_1.fastq.gz"
     File? kraken2_unclassified_read2 = "~{samplename}.unclassified_2.fastq.gz"
