@@ -13,7 +13,7 @@ task freyja_one_sample {
     Boolean bootstrap = false
     Int? number_bootstraps
     Int memory = 12
-    String docker = "us-docker.pkg.dev/general-theiagen/staphb/freyja:1.4.8"
+    String docker = "us-docker.pkg.dev/general-theiagen/staphb/freyja:1.5.3"
     Int disk_size = 100
   }
   command <<<
@@ -56,6 +56,7 @@ task freyja_one_sample {
     fi
   fi
   # Capture reference file versions
+  freyja demix --version | sed -n '2p' | tee FREYJA_DB_VERSION
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
   echo ${freyja_metadata_version} | tee FREYJA_METADATA
   # Call variants and capture sequencing depth information
@@ -110,6 +111,7 @@ task freyja_one_sample {
     File? freyja_bootstrap_summary_pdf = "~{samplename}_summarized.pdf"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
+    String freyja_db_version = read_string("FREYJA_DB_VERSION")
     String freyja_version = read_string("FREYJA_VERSION")
   }
 }

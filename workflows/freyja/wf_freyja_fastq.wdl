@@ -129,6 +129,7 @@ workflow freyja_fastq {
     File freyja_demixed = freyja.freyja_demixed
     String freyja_barcode_version = freyja.freyja_barcode_version
     String freyja_metadata_version = freyja.freyja_metadata_version
+    String freyja_db_version = freyja.freyja_db_version
     File? freyja_bootstrap_lineages = freyja.freyja_bootstrap_lineages
     File? freyja_bootstrap_lineages_pdf = freyja.freyja_bootstrap_lineages_pdf
     File? freyja_bootstrap_summary = freyja.freyja_bootstrap_summary
