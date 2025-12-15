@@ -235,6 +235,11 @@ workflows:
    primaryDescriptorPath: /workflows/utilities/data_import/wf_basespace_fetch.wdl
 #   testParameterFiles:
 #    - empty.json
+ - name: BS_Fetch_WDL
+   subclass: WDL
+   primaryDescriptorPath: /workflows/utilities/data_import/wf_bs_fetch.wdl
+#   testParameterFiles:
+#    - empty.json
  - name: SRA_Fetch_PHB
    subclass: WDL
    primaryDescriptorPath: /workflows/utilities/data_import/wf_sra_fetch.wdl
